@@ -16,6 +16,8 @@ build/
 .idea/
 *.swp
 *.swo
+.cursorindexingignore
+.specstory/
 
 # OS
 .DS_Store
@@ -41,3 +43,6 @@ data/
 # Temporary files
 *.tmp
 temp/
+
+# Old git repositories (embedded)
+Tikme_App_Prototypies_git/
