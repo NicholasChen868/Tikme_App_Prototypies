@@ -37,8 +37,14 @@ env/
 *.bak
 backups/
 
-# Data files (if sensitive)
-data/
+# Data files - Track configs (JSON), ignore large/sensitive data
+# Note: data/ contains configuration JSONs needed for workflows
+data/*.csv
+data/*.xlsx
+data/*.db
+data/*.sqlite
+data/exports/
+data/cache/
 
 # Temporary files
 *.tmp
