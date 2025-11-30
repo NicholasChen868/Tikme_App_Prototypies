@@ -18,6 +18,14 @@ function WhiteboardTool() {
     '#3B82F6', '#8B5CF6', '#EC4899', '#FFFFFF'
   ]
 
+  // Initialize loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -139,6 +147,11 @@ function WhiteboardTool() {
     link.download = `whiteboard-${Date.now()}.png`
     link.href = canvas.toDataURL()
     link.click()
+  }
+
+  // Loading state
+  if (isLoading) {
+    return <ToolLoader toolName="Bảng vẽ" />
   }
 
   return (

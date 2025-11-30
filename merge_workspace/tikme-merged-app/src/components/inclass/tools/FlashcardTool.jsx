@@ -11,6 +11,14 @@ function FlashcardTool() {
   const [showHint, setShowHint] = useState(false)
   const [masteredCards, setMasteredCards] = useState([])
 
+  // Initialize loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
+
   const currentDeck = selectedDeck ? flashcardDecks.find(d => d.id === selectedDeck) : null
   const currentCard = currentDeck?.cards[currentCardIndex]
 
@@ -63,6 +71,11 @@ function FlashcardTool() {
     setCurrentCardIndex(0)
     setIsFlipped(false)
     setMasteredCards([])
+  }
+
+  // Loading state
+  if (isLoading) {
+    return <ToolLoader toolName="Thẻ học" />
   }
 
   // Deck Selection View

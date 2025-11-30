@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { mockStudents } from '@/utils/inclassData'
+import { useState, useEffect, useRef } from 'react'
+import { mockClassStudents } from '@/utils/inclassData'
 import { ToolLoader } from '@/components/common/LoadingStates'
 import './StudentPickerTool.css'
 
@@ -11,6 +11,14 @@ function StudentPickerTool() {
   const [history, setHistory] = useState([])
   const [excludePicked, setExcludePicked] = useState(false)
   const spinIntervalRef = useRef(null)
+
+  // Initialize loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   const activeStudents = mockClassStudents.filter(s => s.status === 'active')
   const availableStudents = excludePicked
@@ -61,6 +69,11 @@ function StudentPickerTool() {
       }
     }
   }, [])
+
+  // Loading state
+  if (isLoading) {
+    return <ToolLoader toolName="Chọn học sinh" />
+  }
 
   return (
     <div className="student-picker-tool">
