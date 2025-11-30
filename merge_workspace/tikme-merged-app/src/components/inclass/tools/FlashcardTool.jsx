@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { flashcardDecks } from '@/utils/inclassData'
 import { ToolLoader } from '@/components/common/LoadingStates'
+import JapaneseText from '@/components/common/JapaneseText'
 import './FlashcardTool.css'
 
 function FlashcardTool() {
@@ -136,14 +137,35 @@ function FlashcardTool() {
           <div className="card-front">
             <span className="card-label">Mặt trước</span>
             <div className="card-content">
-              <span className="japanese-text">{currentCard?.front}</span>
+              {currentCard?.front && (
+                <JapaneseText
+                  kanji={currentCard.front.kanji}
+                  hiragana={currentCard.front.hiragana}
+                  romaji={currentCard.front.romaji}
+                  showFurigana={true}
+                  showRomaji={true}
+                  size="xl"
+                />
+              )}
             </div>
             <span className="flip-hint">Nhấn để lật thẻ</span>
           </div>
           <div className="card-back">
             <span className="card-label">Mặt sau</span>
             <div className="card-content">
-              <span className="answer-text">{currentCard?.back}</span>
+              {currentCard?.back && (
+                <>
+                  <JapaneseText
+                    kanji={currentCard.back.kanji}
+                    hiragana={currentCard.back.hiragana}
+                    romaji={currentCard.back.romaji}
+                    showFurigana={true}
+                    showRomaji={true}
+                    size="xl"
+                  />
+                  <div className="card-meaning">{currentCard.meaning}</div>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,0 +1,95 @@
+/* JapaneseText Component Styles */
+
+.japanese-text {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+}
+
+/* Main Japanese text (kanji/hiragana) */
+.japanese-main {
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Ruby (furigana) support */
+ruby {
+  ruby-position: over;
+  ruby-align: center;
+}
+
+.furigana {
+  font-size: 0.5em;
+  color: var(--text-secondary, #64748b);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+/* Romaji (latinh transliteration) */
+.romaji {
+  font-size: 0.75em;
+  color: var(--text-muted, #94a3b8);
+  font-style: italic;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin-top: 2px;
+}
+
+/* Size variants */
+.japanese-text.sm .japanese-main {
+  font-size: 16px;
+}
+
+.japanese-text.sm .romaji {
+  font-size: 11px;
+}
+
+.japanese-text.md .japanese-main {
+  font-size: 24px;
+}
+
+.japanese-text.md .romaji {
+  font-size: 14px;
+}
+
+.japanese-text.lg .japanese-main {
+  font-size: 32px;
+}
+
+.japanese-text.lg .romaji {
+  font-size: 18px;
+}
+
+.japanese-text.xl .japanese-main {
+  font-size: 48px;
+}
+
+.japanese-text.xl .romaji {
+  font-size: 24px;
+}
+
+/* Single word inline */
+.japanese-word {
+  display: inline;
+  font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+}
+
+/* Sentence with multiple words */
+.japanese-sentence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .furigana {
+    color: #94a3b8;
+  }
+
+  .romaji {
+    color: #64748b;
+  }
+}

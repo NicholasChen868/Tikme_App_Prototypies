@@ -136,20 +136,68 @@ export const flashcardDecks = [
     id: 1,
     name: '使役形 - Nhóm 1',
     cards: [
-      { id: 1, front: '食べる', back: '食べさせる\n(Cho ăn / Bắt ăn)', hint: 'たべる → たべさせる' },
-      { id: 2, front: '見る', back: '見させる\n(Cho xem / Bắt xem)', hint: 'みる → みさせる' },
-      { id: 3, front: '起きる', back: '起きさせる\n(Cho dậy / Bắt dậy)', hint: 'おきる → おきさせる' },
-      { id: 4, front: '寝る', back: '寝させる\n(Cho ngủ / Bắt ngủ)', hint: 'ねる → ねさせる' }
+      {
+        id: 1,
+        front: { kanji: '食べる', hiragana: 'たべる', romaji: 'taberu' },
+        back: { kanji: '食べさせる', hiragana: 'たべさせる', romaji: 'tabesaseru' },
+        meaning: 'Cho ăn / Bắt ăn',
+        hint: 'たべる → たべさせる'
+      },
+      {
+        id: 2,
+        front: { kanji: '見る', hiragana: 'みる', romaji: 'miru' },
+        back: { kanji: '見させる', hiragana: 'みさせる', romaji: 'misaseru' },
+        meaning: 'Cho xem / Bắt xem',
+        hint: 'みる → みさせる'
+      },
+      {
+        id: 3,
+        front: { kanji: '起きる', hiragana: 'おきる', romaji: 'okiru' },
+        back: { kanji: '起きさせる', hiragana: 'おきさせる', romaji: 'okisaseru' },
+        meaning: 'Cho dậy / Bắt dậy',
+        hint: 'おきる → おきさせる'
+      },
+      {
+        id: 4,
+        front: { kanji: '寝る', hiragana: 'ねる', romaji: 'neru' },
+        back: { kanji: '寝させる', hiragana: 'ねさせる', romaji: 'nesaseru' },
+        meaning: 'Cho ngủ / Bắt ngủ',
+        hint: 'ねる → ねさせる'
+      }
     ]
   },
   {
     id: 2,
     name: '使役形 - Nhóm 2',
     cards: [
-      { id: 1, front: '書く', back: '書かせる\n(Cho viết / Bắt viết)', hint: 'かく → かかせる' },
-      { id: 2, front: '読む', back: '読ませる\n(Cho đọc / Bắt đọc)', hint: 'よむ → よませる' },
-      { id: 3, front: '行く', back: '行かせる\n(Cho đi / Bắt đi)', hint: 'いく → いかせる' },
-      { id: 4, front: '帰る', back: '帰らせる\n(Cho về / Bắt về)', hint: 'かえる → かえらせる' }
+      {
+        id: 1,
+        front: { kanji: '書く', hiragana: 'かく', romaji: 'kaku' },
+        back: { kanji: '書かせる', hiragana: 'かかせる', romaji: 'kakaseru' },
+        meaning: 'Cho viết / Bắt viết',
+        hint: 'かく → かかせる'
+      },
+      {
+        id: 2,
+        front: { kanji: '読む', hiragana: 'よむ', romaji: 'yomu' },
+        back: { kanji: '読ませる', hiragana: 'よませる', romaji: 'yomaseru' },
+        meaning: 'Cho đọc / Bắt đọc',
+        hint: 'よむ → よませる'
+      },
+      {
+        id: 3,
+        front: { kanji: '行く', hiragana: 'いく', romaji: 'iku' },
+        back: { kanji: '行かせる', hiragana: 'いかせる', romaji: 'ikaseru' },
+        meaning: 'Cho đi / Bắt đi',
+        hint: 'いく → いかせる'
+      },
+      {
+        id: 4,
+        front: { kanji: '帰る', hiragana: 'かえる', romaji: 'kaeru' },
+        back: { kanji: '帰らせる', hiragana: 'かえらせる', romaji: 'kaeraseru' },
+        meaning: 'Cho về / Bắt về',
+        hint: 'かえる → かえらせる'
+      }
     ]
   }
 ];
