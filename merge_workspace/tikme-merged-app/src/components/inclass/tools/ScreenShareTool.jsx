@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { mockClassStudents } from '@/utils/inclassData'
+import ToolLoader from '@/components/common/LoadingStates'
 import './ScreenShareTool.css'
 
 function ScreenShareTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [isSharing, setIsSharing] = useState(false)
   const [shareType, setShareType] = useState('screen') // screen, window, tab
   const [audioEnabled, setAudioEnabled] = useState(true)
@@ -12,6 +14,11 @@ function ScreenShareTool() {
   const [quality, setQuality] = useState('HD')
   const [elapsedTime, setElapsedTime] = useState(0)
   const [showSettings, setShowSettings] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Simulate viewers joining when sharing starts
   useEffect(() => {
@@ -74,6 +81,10 @@ function ScreenShareTool() {
   ]
 
   const qualityOptions = ['Auto', 'HD', 'SD', 'Low']
+
+  if (isLoading) {
+    return <ToolLoader toolName="Chia sẻ màn hình" />
+  }
 
   return (
     <div className={`screen-share-tool ${isFullscreen ? 'fullscreen' : ''}`}>

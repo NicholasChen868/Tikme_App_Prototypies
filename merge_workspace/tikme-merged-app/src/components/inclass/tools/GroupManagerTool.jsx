@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { mockClassStudents } from '@/utils/inclassData'
+import ToolLoader from '@/components/common/LoadingStates'
 import './GroupManagerTool.css'
 
 const groupColors = [
@@ -13,12 +14,18 @@ const groupNames = [
 ]
 
 function GroupManagerTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [groupCount, setGroupCount] = useState(4)
   const [groups, setGroups] = useState([])
   const [ungroupedStudents, setUngroupedStudents] = useState([...mockClassStudents])
   const [isCreated, setIsCreated] = useState(false)
   const [draggedStudent, setDraggedStudent] = useState(null)
   const [editingTask, setEditingTask] = useState(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Create random groups
   const createRandomGroups = () => {
@@ -71,6 +78,25 @@ function GroupManagerTool() {
     setUngroupedStudents([...mockClassStudents])
     setIsCreated(false)
     setEditingTask(null)
+  }
+
+  // Export groups to CSV
+  const exportGroups = () => {
+    if (groups.length === 0) return
+
+    // Create CSV content with UTF-8 BOM for Excel compatibility
+    const csv = '\uFEFF' + 'Nhóm,Màu,Số lượng,Thành viên,Nhiệm vụ,Hoàn thành,Sao\n' + 
+      groups.map(g => 
+        `"${g.name}","${g.color}",${g.students.length},"${g.students.map(s => s.name).join('; ')}","${g.task || 'Chưa có'}","${g.isComplete ? 'Đã hoàn thành' : 'Chưa hoàn thành'}",${g.stars}`
+      ).join('\n')
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `groups-${new Date().toISOString().slice(0, 10)}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   // Handle drag start
@@ -166,6 +192,10 @@ function GroupManagerTool() {
     ))
   }
 
+  if (isLoading) {
+    return <ToolLoader toolName="Quản lý nhóm" />
+  }
+
   // Setup View
   if (!isCreated) {
     return (
@@ -211,15 +241,20 @@ function GroupManagerTool() {
     <div className="group-manager-tool">
       {/* Header */}
       <div className="manager-header">
-        <div className="header-info">
+        <div className="groups-header-left">
           <h3>👥 {groups.length} Nhóm</h3>
           <span className="complete-count">
             ✅ {groups.filter(g => g.isComplete).length}/{groups.length} hoàn thành
           </span>
         </div>
-        <button className="reset-btn" onClick={resetGroups}>
-          🔄 Đặt lại
-        </button>
+        <div className="groups-header-actions">
+          <button className="export-btn" onClick={exportGroups} title="Xuất danh sách nhóm">
+            📥 Xuất CSV
+          </button>
+          <button className="reset-btn" onClick={resetGroups}>
+            🔄 Đặt lại
+          </button>
+        </div>
       </div>
 
       {/* Groups Grid */}

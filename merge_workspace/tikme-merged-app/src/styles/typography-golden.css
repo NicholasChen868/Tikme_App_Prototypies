@@ -1,0 +1,499 @@
+/* typography-golden.css - Golden Ratio Typography System */
+/* Phase 4D - Perfect Text Harmony */
+/* Based on φ (Phi) = 1.618033988749895 */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES - GOLDEN SCALE
+   ============================================ */
+
+:root {
+  /* Golden Ratio */
+  --phi: 1.618033988749895;
+
+  /* Base Font Size */
+  --font-size-base: 14px;
+
+  /* Golden Scale - Font Sizes */
+  --font-size-2xs: 10px;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 22px;
+  --font-size-3xl: 28px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
+  --font-size-6xl: 64px;
+
+  /* Japanese Zoom-Optimized Sizes */
+  --font-size-jp-sm: 20px;
+  --font-size-jp-md: 28px;
+  --font-size-jp-lg: 36px;
+  --font-size-jp-xl: 48px;
+  --font-size-jp-2xl: 64px;
+
+  /* Line Heights - Golden Ratio Based */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.618; /* φ */
+  --line-height-loose: 1.75;
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Font Families */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  --font-japanese: 'Noto Sans JP', 'M PLUS Rounded 1c', 'Hiragino Sans', sans-serif;
+  --font-vietnamese: 'Inter', 'Roboto', -apple-system, sans-serif;
+}
+
+/* ============================================
+   FONT SIZE UTILITY CLASSES
+   ============================================ */
+
+.text-2xs { font-size: var(--font-size-2xs); line-height: var(--line-height-normal); }
+.text-xs { font-size: var(--font-size-xs); line-height: var(--line-height-normal); }
+.text-sm { font-size: var(--font-size-sm); line-height: var(--line-height-normal); }
+.text-base { font-size: var(--font-size-base); line-height: var(--line-height-normal); }
+.text-lg { font-size: var(--font-size-lg); line-height: var(--line-height-snug); }
+.text-xl { font-size: var(--font-size-xl); line-height: var(--line-height-snug); }
+.text-2xl { font-size: var(--font-size-2xl); line-height: var(--line-height-tight); }
+.text-3xl { font-size: var(--font-size-3xl); line-height: var(--line-height-tight); }
+.text-4xl { font-size: var(--font-size-4xl); line-height: var(--line-height-tight); }
+.text-5xl { font-size: var(--font-size-5xl); line-height: 1.15; }
+.text-6xl { font-size: var(--font-size-6xl); line-height: 1.1; }
+
+/* Japanese Text Sizes (Zoom-Optimized) */
+.text-jp-sm { font-size: var(--font-size-jp-sm); font-family: var(--font-japanese); }
+.text-jp-md { font-size: var(--font-size-jp-md); font-family: var(--font-japanese); }
+.text-jp-lg { font-size: var(--font-size-jp-lg); font-family: var(--font-japanese); }
+.text-jp-xl { font-size: var(--font-size-jp-xl); font-family: var(--font-japanese); }
+.text-jp-2xl { font-size: var(--font-size-jp-2xl); font-family: var(--font-japanese); }
+
+/* ============================================
+   FONT WEIGHT UTILITIES
+   ============================================ */
+
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-extrabold { font-weight: var(--font-weight-extrabold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+/* ============================================
+   LINE HEIGHT UTILITIES
+   ============================================ */
+
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-snug { line-height: var(--line-height-snug); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+
+/* ============================================
+   LETTER SPACING UTILITIES
+   ============================================ */
+
+.tracking-tighter { letter-spacing: var(--tracking-tighter); }
+.tracking-tight { letter-spacing: var(--tracking-tight); }
+.tracking-normal { letter-spacing: var(--tracking-normal); }
+.tracking-wide { letter-spacing: var(--tracking-wide); }
+.tracking-wider { letter-spacing: var(--tracking-wider); }
+.tracking-widest { letter-spacing: var(--tracking-widest); }
+
+/* ============================================
+   FONT FAMILY UTILITIES
+   ============================================ */
+
+.font-sans { font-family: var(--font-sans); }
+.font-serif { font-family: var(--font-serif); }
+.font-mono { font-family: var(--font-mono); }
+.font-japanese { font-family: var(--font-japanese); }
+.font-vietnamese { font-family: var(--font-vietnamese); }
+
+/* ============================================
+   TEXT TRUNCATION PREVENTION
+   ============================================ */
+
+/* Never truncate - wrap instead */
+.text-no-truncate {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Smart wrapping for names */
+.text-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Auto-fit text container */
+.text-fit {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Scale down to fit */
+.text-scale-down {
+  display: inline-block;
+  max-width: 100%;
+  /* Use with font-size: clamp() */
+}
+
+/* ============================================
+   RESPONSIVE FONT SIZES (clamp-based)
+   ============================================ */
+
+/* Fluid typography using clamp() */
+.text-fluid-xs {
+  font-size: clamp(10px, 2vw, 11px);
+}
+
+.text-fluid-sm {
+  font-size: clamp(11px, 2.5vw, 12px);
+}
+
+.text-fluid-base {
+  font-size: clamp(12px, 3vw, 14px);
+}
+
+.text-fluid-lg {
+  font-size: clamp(14px, 3.5vw, 16px);
+}
+
+.text-fluid-xl {
+  font-size: clamp(16px, 4vw, 18px);
+}
+
+.text-fluid-2xl {
+  font-size: clamp(18px, 4.5vw, 22px);
+}
+
+.text-fluid-3xl {
+  font-size: clamp(22px, 5vw, 28px);
+}
+
+.text-fluid-4xl {
+  font-size: clamp(28px, 6vw, 36px);
+}
+
+/* Student Name - Always Fits */
+.text-student-name {
+  font-size: clamp(11px, 3vw, 14px);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Card Title - Responsive */
+.text-card-title {
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* ============================================
+   JAPANESE TYPOGRAPHY SPECIAL
+   ============================================ */
+
+/* Kanji with golden proportions */
+.text-kanji {
+  font-family: var(--font-japanese);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+/* Hiragana/Katakana */
+.text-kana {
+  font-family: var(--font-japanese);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Furigana (ruby text) */
+.text-furigana {
+  font-size: 0.5em;
+  font-family: var(--font-japanese);
+  font-weight: 400;
+}
+
+/* Romaji */
+.text-romaji {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--slate-500);
+}
+
+/* Zoom-friendly Japanese (readable from 2m) */
+.text-jp-zoom {
+  font-family: var(--font-japanese);
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+}
+
+/* ============================================
+   VIETNAMESE TYPOGRAPHY SPECIAL
+   ============================================ */
+
+/* Vietnamese names with diacritics */
+.text-vietnamese {
+  font-family: var(--font-vietnamese);
+  font-feature-settings: 'kern' 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Vietnamese name - smart sizing */
+.text-vn-name {
+  font-family: var(--font-vietnamese);
+  font-size: clamp(12px, 3.5vw, 15px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+/* Long Vietnamese name handling */
+.text-vn-name-long {
+  font-size: clamp(11px, 3vw, 13px);
+}
+
+/* ============================================
+   TEXT COLORS (Semantic)
+   ============================================ */
+
+.text-primary { color: var(--slate-900); }
+.text-secondary { color: var(--slate-600); }
+.text-tertiary { color: var(--slate-500); }
+.text-muted { color: var(--slate-400); }
+.text-disabled { color: var(--slate-300); }
+
+.text-accent { color: var(--primary-600, #8B5CF6); }
+.text-success { color: var(--success-600, #10B981); }
+.text-warning { color: var(--warning-600, #F59E0B); }
+.text-danger { color: var(--danger-600, #EF4444); }
+.text-info { color: var(--info-600, #3B82F6); }
+
+/* ============================================
+   HEADING STYLES
+   ============================================ */
+
+.heading-1 {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+  color: var(--slate-900);
+}
+
+.heading-2 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-tight);
+  color: var(--slate-900);
+}
+
+.heading-3 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  color: var(--slate-900);
+}
+
+.heading-4 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.25;
+  color: var(--slate-900);
+}
+
+.heading-5 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.3;
+  color: var(--slate-900);
+}
+
+.heading-6 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.4;
+  color: var(--slate-900);
+}
+
+/* ============================================
+   BODY TEXT STYLES
+   ============================================ */
+
+.body-large {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--slate-700);
+}
+
+.body-base {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--slate-700);
+}
+
+.body-small {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--slate-600);
+}
+
+/* ============================================
+   LABEL & CAPTION STYLES
+   ============================================ */
+
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--slate-500);
+}
+
+.caption {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  color: var(--slate-500);
+}
+
+.overline {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--slate-400);
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Mobile First Approach */
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: 13px;
+    --font-size-lg: 15px;
+    --font-size-xl: 17px;
+    --font-size-2xl: 20px;
+    --font-size-3xl: 24px;
+    --font-size-4xl: 30px;
+    --font-size-5xl: 40px;
+  }
+
+  .text-student-name {
+    font-size: 12px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  :root {
+    --font-size-base: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 22px;
+    --font-size-3xl: 28px;
+    --font-size-4xl: 36px;
+    --font-size-5xl: 48px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  :root {
+    --font-size-5xl: 52px;
+    --font-size-6xl: 68px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+  :root {
+    --font-size-6xl: 72px;
+  }
+}
+
+/* ============================================
+   ZOOM-FRIENDLY CLASSES
+   ============================================ */
+
+/* For Zoom presentations (125%, 150%, 200%) */
+.zoom-optimized {
+  font-size: clamp(16px, 4vw, 24px);
+  line-height: 1.5;
+}
+
+.zoom-title {
+  font-size: clamp(24px, 6vw, 48px);
+  font-weight: 700;
+}
+
+.zoom-subtitle {
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight: 500;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .text-secondary,
+  .text-tertiary,
+  .text-muted {
+    color: var(--slate-800);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for text elements */
+.text-interactive:focus-visible {
+  outline: 2px solid var(--primary-500, #8B5CF6);
+  outline-offset: 2px;
+}

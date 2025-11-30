@@ -60,11 +60,36 @@
   flex-direction: column;
 }
 
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .leaderboard-section h3 {
   font-size: 16px;
   font-weight: 700;
   color: var(--slate-900);
-  margin-bottom: 16px;
+  margin: 0;
+}
+
+.leaderboard-section .export-btn {
+  padding: 8px 16px;
+  background: var(--primary-500, #8b5cf6);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.leaderboard-section .export-btn:hover {
+  background: var(--primary-600, #7c3aed);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .leaderboard-list {

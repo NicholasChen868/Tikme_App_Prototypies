@@ -1,39 +1,91 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { quizQuestions } from '@/utils/inclassData'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './QuizTool.css'
 
 function QuizTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [textAnswer, setTextAnswer] = useState('')
   const [showResult, setShowResult] = useState(false)
   const [score, setScore] = useState({ correct: 0, total: 0 })
   const [quizMode, setQuizMode] = useState('teacher') // teacher | student
+  // Phase 4B: Timer per question
+  const TIME_PER_QUESTION = 30 // seconds
+  const [timeRemaining, setTimeRemaining] = useState(TIME_PER_QUESTION)
+
+  // Initialize loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   const currentQuestion = quizQuestions[currentQuestionIndex]
   const isLastQuestion = currentQuestionIndex === quizQuestions.length - 1
+
+  // Timer color logic
+  const getTimerColor = () => {
+    if (timeRemaining > 15) return '#10B981' // green
+    if (timeRemaining > 5) return '#F59E0B'  // orange
+    return '#EF4444' // red
+  }
+
+  const getTimerClass = () => {
+    if (timeRemaining <= 5) return 'timer-warning'
+    if (timeRemaining <= 15) return 'timer-caution'
+    return ''
+  }
 
   const handleAnswerSelect = (index) => {
     if (showResult) return
     setSelectedAnswer(index)
   }
 
-  const handleSubmit = () => {
+  // Handle submit - wrapped in useCallback for timer dependency
+  const handleSubmit = useCallback(() => {
     if (currentQuestion.type === 'multiple') {
-      const isCorrect = selectedAnswer === currentQuestion.correct
+      const correct = selectedAnswer === currentQuestion.correct
       setScore(prev => ({
-        correct: prev.correct + (isCorrect ? 1 : 0),
+        correct: prev.correct + (correct ? 1 : 0),
         total: prev.total + 1
       }))
     } else {
-      const isCorrect = textAnswer.trim() === currentQuestion.answer
+      const correct = textAnswer.trim() === currentQuestion.answer
       setScore(prev => ({
-        correct: prev.correct + (isCorrect ? 1 : 0),
+        correct: prev.correct + (correct ? 1 : 0),
         total: prev.total + 1
       }))
     }
     setShowResult(true)
-  }
+  }, [currentQuestion, selectedAnswer, textAnswer])
+
+  // Reset timer when question changes
+  useEffect(() => {
+    setTimeRemaining(TIME_PER_QUESTION)
+  }, [currentQuestionIndex])
+
+  // Timer countdown
+  useEffect(() => {
+    // Don't run if result is showing or time is 0
+    if (showResult || timeRemaining <= 0) return
+
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          // Auto-submit when time runs out
+          clearInterval(timer)
+          handleSubmit()
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [showResult, handleSubmit, timeRemaining])
 
   const handleNext = () => {
     if (isLastQuestion) {
@@ -44,6 +96,7 @@ function QuizTool() {
     setSelectedAnswer(null)
     setTextAnswer('')
     setShowResult(false)
+    // Timer will reset via the effect above
   }
 
   const handleRestart = () => {
@@ -52,6 +105,7 @@ function QuizTool() {
     setTextAnswer('')
     setShowResult(false)
     setScore({ correct: 0, total: 0 })
+    setTimeRemaining(TIME_PER_QUESTION)
   }
 
   const isCorrect = currentQuestion.type === 'multiple'
@@ -91,6 +145,10 @@ function QuizTool() {
     )
   }
 
+  if (isLoading) {
+    return <ToolLoader toolName="Quiz" />
+  }
+
   return (
     <div className="quiz-tool">
       {/* Progress Bar */}
@@ -119,6 +177,18 @@ function QuizTool() {
         <div className="question-type-badge">
           {currentQuestion.type === 'multiple' ? '📝 Trắc nghiệm' : '✍️ Tự luận'}
         </div>
+
+        {/* Timer Display */}
+        {!showResult && (
+          <div
+            className={`quiz-timer ${getTimerClass()}`}
+            style={{ '--timer-color': getTimerColor() }}
+          >
+            <span className="timer-icon">⏱️</span>
+            <span className="timer-value">{timeRemaining}s</span>
+          </div>
+        )}
+
         <h2 className="question-text">{currentQuestion.question}</h2>
 
         {/* Multiple Choice Options */}

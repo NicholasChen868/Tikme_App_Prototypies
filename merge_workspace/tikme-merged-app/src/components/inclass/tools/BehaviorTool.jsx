@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { mockClassStudents, behaviorActions } from '@/utils/inclassData'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './BehaviorTool.css'
 
 function BehaviorTool() {
-  const [studentPoints, setStudentPoints] = useState(() => {
+  const [isLoading, setIsLoading] = useState(true)
+  const [studentBehavior, setStudentBehavior] = useState(() => {
     const initial = {}
     mockClassStudents.forEach(s => {
       initial[s.id] = s.stars || 0
@@ -14,8 +16,34 @@ function BehaviorTool() {
   const [recentActions, setRecentActions] = useState([])
   const [selectedStudent, setSelectedStudent] = useState(null)
 
+  // Initialize loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Export behavior log to CSV
+  const exportBehavior = () => {
+    const csv = '\uFEFF' + 'Hạng,Học sinh,Điểm,Số hoạt động\n' + 
+      rankedStudents.map((s, index) => {
+        const points = studentBehavior[s.id] || 0
+        const actions = recentActions.filter(a => a.studentId === s.id).length
+        return `${index + 1},"${s.name}",${points},${actions}`
+      }).join('\n')
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `behavior-log-${new Date().toISOString().slice(0, 10)}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   const handleAction = (studentId, action) => {
-    setStudentPoints(prev => ({
+    setStudentBehavior(prev => ({
       ...prev,
       [studentId]: Math.max(0, (prev[studentId] || 0) + action.points)
     }))
@@ -34,10 +62,14 @@ function BehaviorTool() {
 
   // Sort students by points
   const rankedStudents = [...mockClassStudents].sort((a, b) =>
-    (studentPoints[b.id] || 0) - (studentPoints[a.id] || 0)
+    (studentBehavior[b.id] || 0) - (studentBehavior[a.id] || 0)
   )
 
-  const totalPoints = Object.values(studentPoints).reduce((a, b) => a + b, 0)
+  const totalPoints = Object.values(studentBehavior).reduce((a, b) => a + b, 0)
+
+  if (isLoading) {
+    return <ToolLoader toolName="Hành vi" />
+  }
 
   return (
     <div className="behavior-tool">
@@ -61,10 +93,15 @@ function BehaviorTool() {
       <div className="behavior-content">
         {/* Leaderboard */}
         <div className="leaderboard-section">
-          <h3>🏆 Bảng xếp hạng</h3>
+          <div className="leaderboard-header">
+            <h3>🏆 Bảng xếp hạng</h3>
+            <button className="export-btn" onClick={exportBehavior} title="Xuất báo cáo hành vi">
+              📥 Xuất CSV
+            </button>
+          </div>
           <div className="leaderboard-list">
             {rankedStudents.map((student, index) => {
-              const points = studentPoints[student.id] || 0
+              const points = studentBehavior[student.id] || 0
               const isSelected = selectedStudent === student.id
 
               return (

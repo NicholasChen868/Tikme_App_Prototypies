@@ -15,6 +15,7 @@ import {
   ProgressTracker1Tool,
   ProgressTracker2Tool
 } from '@/components/inclass/tools'
+import KeyboardShortcuts from '@/components/common/KeyboardShortcuts'
 import { phases, mockClassStudents, teachingTools, lessonInfo } from '@/utils/inclassData'
 import '@/styles/inclass-vars.css'
 import './styles.css'
@@ -292,6 +293,9 @@ function InClassTeaching() {
           )}
         </div>
       </div>
+
+      {/* Keyboard Shortcuts Helper */}
+      <KeyboardShortcuts />
     </div>
   )
 }

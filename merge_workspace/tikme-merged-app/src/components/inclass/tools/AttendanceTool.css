@@ -259,3 +259,205 @@
   background: var(--slate-300);
   border-radius: 3px;
 }
+
+/* Phase 4B: Absent Reason Display */
+.absent-reason {
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: var(--slate-50);
+  border-radius: 6px;
+  font-size: 12px;
+  display: flex;
+  gap: 6px;
+  max-width: 250px;
+}
+
+.reason-label {
+  color: var(--slate-500);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.reason-text {
+  color: var(--slate-700);
+  font-style: italic;
+  cursor: pointer;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reason-text:hover {
+  color: #3B82F6;
+  text-decoration: underline;
+}
+
+/* Reason Modal */
+.reason-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.reason-modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--slate-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--slate-400);
+  cursor: pointer;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: var(--slate-100);
+  color: var(--slate-700);
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.reason-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--slate-200);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.reason-textarea:focus {
+  border-color: #3B82F6;
+}
+
+.reason-textarea::placeholder {
+  color: var(--slate-400);
+}
+
+.quick-reasons {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.quick-label {
+  font-size: 13px;
+  color: var(--slate-500);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.quick-reasons button {
+  padding: 8px 14px;
+  background: var(--slate-100);
+  border: 2px solid var(--slate-200);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-reasons button:hover {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+  color: #3B82F6;
+}
+
+.modal-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--slate-200);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-actions .cancel-btn {
+  padding: 12px 24px;
+  background: white;
+  border: 2px solid var(--slate-200);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--slate-600);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-actions .cancel-btn:hover {
+  background: var(--slate-100);
+  border-color: var(--slate-300);
+}
+
+.modal-actions .save-reason-btn {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-actions .save-reason-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}

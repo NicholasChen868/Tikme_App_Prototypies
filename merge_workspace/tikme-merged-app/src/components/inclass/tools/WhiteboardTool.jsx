@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './WhiteboardTool.css'
 
 function WhiteboardTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const canvasRef = useRef(null)
   const [isDrawing, setIsDrawing] = useState(false)
   const [color, setColor] = useState('#1a202c')

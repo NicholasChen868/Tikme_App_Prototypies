@@ -313,3 +313,86 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Phase 4B: Anonymous Toggle */
+.poll-setting {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid var(--slate-200);
+}
+
+.setting-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.setting-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary-500);
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--slate-700);
+}
+
+.toggle-icon {
+  font-size: 18px;
+}
+
+.setting-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--slate-500);
+  margin-left: 30px;
+}
+
+/* Anonymous Badge */
+.anonymous-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #F3E8FF, #E9D5FF);
+  border: 2px solid #C084FC;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #7C3AED;
+  margin-bottom: 16px;
+}
+
+/* Export Button */
+.poll-controls .control-btn.export {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+}
+
+.poll-controls .control-btn.export:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Voters List */
+.voters-list {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--slate-50);
+  border-radius: 8px;
+}
+
+.voters-list small {
+  color: var(--slate-600);
+  font-size: 12px;
+  line-height: 1.5;
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ToolLoader from '@/components/common/LoadingStates'
 import './ProgressTracker1Tool.css'
 
 // Default lesson activities
@@ -15,11 +16,17 @@ const defaultActivities = [
 const activityIcons = ['💬', '📚', '📝', '🎧', '🗣️', '👥', '📋', '🎮', '✍️', '🎯', '📊', '🎬']
 
 function ProgressTracker1Tool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [activities, setActivities] = useState(defaultActivities)
   const [currentActivityId, setCurrentActivityId] = useState(3)
   const [showAddModal, setShowAddModal] = useState(false)
   const [newActivity, setNewActivity] = useState({ name: '', duration: 10, icon: '📝' })
   const [draggedId, setDraggedId] = useState(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Auto-increment elapsed time for current activity
   useEffect(() => {
@@ -112,6 +119,10 @@ function ProgressTracker1Tool() {
   const formatDuration = (mins) => {
     if (mins < 1) return `${Math.round(mins * 60)}s`
     return `${Math.round(mins)}m`
+  }
+
+  if (isLoading) {
+    return <ToolLoader toolName="Tiến độ bài học" />
   }
 
   return (

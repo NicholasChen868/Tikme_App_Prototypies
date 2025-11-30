@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { timerPresets } from '@/utils/inclassData'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './TimerTool.css'
 
 function TimerTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [mode, setMode] = useState('countdown') // countdown | stopwatch
   const [time, setTime] = useState(60)
   const [initialTime, setInitialTime] = useState(60)
@@ -10,6 +12,14 @@ function TimerTool() {
   const [customMinutes, setCustomMinutes] = useState('')
   const [customSeconds, setCustomSeconds] = useState('')
   const audioRef = useRef(null)
+
+  // Initialize loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     let interval = null

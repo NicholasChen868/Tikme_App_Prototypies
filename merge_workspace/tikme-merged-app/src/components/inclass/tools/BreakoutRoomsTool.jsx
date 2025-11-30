@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { mockClassStudents } from '@/utils/inclassData'
+import ToolLoader from '@/components/common/LoadingStates'
 import './BreakoutRoomsTool.css'
 
 const roomColors = [
@@ -8,6 +9,7 @@ const roomColors = [
 ]
 
 function BreakoutRoomsTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [rooms, setRooms] = useState([])
   const [roomCount, setRoomCount] = useState(4)
   const [roomTimer, setRoomTimer] = useState(10) // minutes
@@ -17,6 +19,11 @@ function BreakoutRoomsTool() {
   const [broadcastMessage, setBroadcastMessage] = useState('')
   const [showBroadcast, setShowBroadcast] = useState(false)
   const timerRef = useRef(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Timer effect
   useEffect(() => {
@@ -121,6 +128,10 @@ function BreakoutRoomsTool() {
 
   const timeRemaining = roomTimer * 60 - elapsedTime
   const isTimeUp = roomTimer > 0 && timeRemaining <= 0
+
+  if (isLoading) {
+    return <ToolLoader toolName="Phòng nhỏ" />
+  }
 
   // Setup View
   if (!isActive) {

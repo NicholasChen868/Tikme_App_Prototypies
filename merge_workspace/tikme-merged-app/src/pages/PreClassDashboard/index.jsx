@@ -10,6 +10,8 @@ function PreClassDashboard() {
   const [filterStatus, setFilterStatus] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedStudent, setSelectedStudent] = useState(null)
+  const [sortBy, setSortBy] = useState('name') // name, avgScore, absentCount
+  const [sortOrder, setSortOrder] = useState('asc') // asc, desc
 
   // Calculate stats from real data
   const readinessStats = useMemo(() => calculateReadinessStats(mockStudents), [])
@@ -19,6 +21,41 @@ function PreClassDashboard() {
   const alarmCount = useMemo(() =>
     mockStudents.filter(s => s.absentCount.noReason >= 3).length,
   [])
+
+  // Helper: Calculate average score across all metrics
+  const calculateAvgScore = (metrics) => {
+    const scores = [
+      metrics.vocabulary.current,
+      metrics.grammar.current,
+      metrics.listening.current,
+      metrics.pronunciation.current,
+      metrics.timeSpent.current
+    ]
+    return scores.reduce((sum, score) => sum + score, 0) / scores.length
+  }
+
+  // Sort students
+  const sortStudents = (students) => {
+    const sorted = [...students].sort((a, b) => {
+      let compareValue = 0
+
+      if (sortBy === 'name') {
+        compareValue = a.name.localeCompare(b.name, 'vi')
+      } else if (sortBy === 'avgScore') {
+        const avgA = calculateAvgScore(a.metrics)
+        const avgB = calculateAvgScore(b.metrics)
+        compareValue = avgB - avgA // Higher scores first by default
+      } else if (sortBy === 'absentCount') {
+        const totalA = a.absentCount.withReason + a.absentCount.noReason
+        const totalB = b.absentCount.withReason + b.absentCount.noReason
+        compareValue = totalA - totalB // Lower absences first by default
+      }
+
+      return sortOrder === 'asc' ? compareValue : -compareValue
+    })
+
+    return sorted
+  }
 
   // Filter students by readiness status and search query
   const filteredStudents = useMemo(() => {
@@ -41,8 +78,11 @@ function PreClassDashboard() {
       )
     }
 
+    // Apply sort
+    result = sortStudents(result)
+
     return result
-  }, [filterStatus, searchQuery])
+  }, [filterStatus, searchQuery, sortBy, sortOrder])
 
   return (
     <div className="preclass-dashboard">
@@ -105,6 +145,29 @@ function PreClassDashboard() {
               ✕
             </button>
           )}
+        </div>
+
+        {/* Sort Controls */}
+        <div className="sort-controls">
+          <label className="sort-label">Sắp xếp:</label>
+          <select 
+            className="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="name">Tên (A-Z)</option>
+            <option value="avgScore">Điểm TB</option>
+            <option value="absentCount">Số buổi vắng</option>
+          </select>
+          
+          {/* Sort Order Toggle */}
+          <button 
+            className="sort-order-btn"
+            onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+            title={sortOrder === 'asc' ? 'Tăng dần' : 'Giảm dần'}
+          >
+            {sortOrder === 'asc' ? '↑' : '↓'}
+          </button>
         </div>
 
         {/* Filter Tabs */}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { mockClassStudents } from '@/utils/inclassData'
+import ToolLoader from '@/components/common/LoadingStates'
 import './ProgressTracker2Tool.css'
 
 // Generate mock student progress data
@@ -17,11 +18,17 @@ const generateStudentProgress = () => {
 }
 
 function ProgressTracker2Tool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [students, setStudents] = useState(generateStudentProgress())
   const [sortBy, setSortBy] = useState('progress') // progress, time, name
   const [filterStatus, setFilterStatus] = useState('all') // all, complete, inProgress, needsHelp
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [showActionModal, setShowActionModal] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Simulate real-time progress updates
   useEffect(() => {
@@ -107,6 +114,10 @@ function ProgressTracker2Tool() {
     const m = Math.floor(mins)
     const s = Math.round((mins - m) * 60)
     return `${m}:${s.toString().padStart(2, '0')}`
+  }
+
+  if (isLoading) {
+    return <ToolLoader toolName="Tiến độ học sinh" />
   }
 
   return (

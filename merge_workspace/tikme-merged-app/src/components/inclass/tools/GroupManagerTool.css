@@ -152,6 +152,29 @@
   color: #10B981;
 }
 
+.groups-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.export-btn {
+  padding: 10px 20px;
+  background: var(--primary-500, #8b5cf6);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-btn:hover {
+  background: var(--primary-600, #7c3aed);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
 .reset-btn {
   padding: 10px 20px;
   background: var(--slate-100);

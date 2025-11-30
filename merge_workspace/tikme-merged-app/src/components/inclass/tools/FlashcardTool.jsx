@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { flashcardDecks } from '@/utils/inclassData'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './FlashcardTool.css'
 
 function FlashcardTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedDeck, setSelectedDeck] = useState(null)
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)

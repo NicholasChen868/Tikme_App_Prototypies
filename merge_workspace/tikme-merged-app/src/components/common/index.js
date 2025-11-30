@@ -43,3 +43,28 @@ export {
   ButtonTooltip,
   StatusTooltip
 } from './Tooltip'
+
+// Icons (Phase 4D)
+export {
+  default as Icon,
+  IconButton,
+  ToolIcon,
+  StatusIcon,
+  IconBadge,
+  AnimatedIcon,
+  EmojiIcon,
+  TeachingToolIcons,
+  StatusIcons
+} from './Icon'
+
+// Smart Text (Phase 4D)
+export {
+  default as SmartText,
+  VietnameseName,
+  StudentNameDisplay,
+  AutoHeading,
+  JapaneseText,
+  TruncateWithTooltip,
+  ResponsiveText,
+  GoldenLabel
+} from './SmartText'

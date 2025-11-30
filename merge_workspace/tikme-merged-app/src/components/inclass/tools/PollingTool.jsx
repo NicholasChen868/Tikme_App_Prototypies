@@ -1,31 +1,65 @@
 import { useState, useEffect } from 'react'
 import { pollTemplates, mockClassStudents } from '@/utils/inclassData'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './PollingTool.css'
 
 function PollingTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [activePoll, setActivePoll] = useState(null)
   const [pollResults, setPollResults] = useState({})
   const [isPollLive, setIsPollLive] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [customQuestion, setCustomQuestion] = useState('')
   const [customOptions, setCustomOptions] = useState(['', '', ''])
+  // Phase 4B: Anonymous voting + Export
+  const [isAnonymous, setIsAnonymous] = useState(false)
+  const [voters, setVoters] = useState({}) // { optionId: [studentNames] }
+
+  // Initialize loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Simulate votes coming in
   useEffect(() => {
     if (isPollLive && activePoll) {
+      let voteCount = 0
+      const activeStudents = mockClassStudents.filter(s => s.status === 'active')
+      const votedStudents = new Set()
+
       const voteInterval = setInterval(() => {
-        setPollResults(prev => {
-          const newResults = { ...prev }
-          const randomOption = activePoll.options[Math.floor(Math.random() * activePoll.options.length)]
-          newResults[randomOption.id] = (newResults[randomOption.id] || 0) + 1
-          return newResults
-        })
+        // Get students who haven't voted yet
+        const availableStudents = activeStudents.filter(s => !votedStudents.has(s.id))
+        if (availableStudents.length === 0 || voteCount >= 10) {
+          clearInterval(voteInterval)
+          return
+        }
+
+        const randomStudent = availableStudents[Math.floor(Math.random() * availableStudents.length)]
+        const randomOption = activePoll.options[Math.floor(Math.random() * activePoll.options.length)]
+
+        votedStudents.add(randomStudent.id)
+        voteCount++
+
+        setPollResults(prev => ({
+          ...prev,
+          [randomOption.id]: (prev[randomOption.id] || 0) + 1
+        }))
+
+        // Track who voted for what (for non-anonymous display)
+        setVoters(prev => ({
+          ...prev,
+          [randomOption.id]: [...(prev[randomOption.id] || []), randomStudent.name]
+        }))
       }, 800 + Math.random() * 1200)
 
-      // Stop after ~8 votes
+      // Stop after ~10 seconds
       const stopTimeout = setTimeout(() => {
         clearInterval(voteInterval)
-      }, 8000)
+      }, 10000)
 
       return () => {
         clearInterval(voteInterval)
@@ -37,8 +71,9 @@ function PollingTool() {
   const totalVotes = Object.values(pollResults).reduce((a, b) => a + b, 0)
 
   const handleStartPoll = (poll) => {
-    setActivePoll(poll)
+    setActivePoll({ ...poll, isAnonymous })
     setPollResults({})
+    setVoters({})
     setIsPollLive(true)
     setShowResults(false)
   }
@@ -51,12 +86,42 @@ function PollingTool() {
   const handleClosePoll = () => {
     setActivePoll(null)
     setPollResults({})
+    setVoters({})
     setShowResults(false)
   }
 
   const getPercentage = (optionId) => {
     if (totalVotes === 0) return 0
     return Math.round((pollResults[optionId] || 0) / totalVotes * 100)
+  }
+
+  // Export results to CSV
+  const exportResults = () => {
+    if (!activePoll) return
+
+    // Create CSV content with Vietnamese headers
+    const headers = 'Lựa chọn,Số phiếu,Phần trăm\n'
+    const rows = activePoll.options.map(option => {
+      const votes = pollResults[option.id] || 0
+      const percentage = getPercentage(option.id)
+      return `"${option.text}",${votes},${percentage}%`
+    }).join('\n')
+
+    const csv = '\uFEFF' + headers + rows // BOM for UTF-8
+
+    // Download file
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    const now = new Date()
+    const filename = `poll-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.csv`
+
+    link.href = url
+    link.download = filename
+    link.click()
+
+    URL.revokeObjectURL(url)
   }
 
   const handleCreateCustomPoll = () => {
@@ -80,6 +145,10 @@ function PollingTool() {
     setCustomOptions(['', '', ''])
   }
 
+  if (isLoading) {
+    return <ToolLoader toolName="Bình chọn" />
+  }
+
   return (
     <div className="polling-tool">
       {/* Active Poll View */}
@@ -96,11 +165,19 @@ function PollingTool() {
             </div>
           </div>
 
+          {/* Anonymous indicator */}
+          {activePoll.isAnonymous && (
+            <div className="anonymous-badge">
+              🔒 Bình chọn ẩn danh
+            </div>
+          )}
+
           {/* Poll Options */}
           <div className="poll-options">
             {activePoll.options.map(option => {
               const percentage = getPercentage(option.id)
               const votes = pollResults[option.id] || 0
+              const optionVoters = voters[option.id] || []
 
               return (
                 <div key={option.id} className="poll-option">
@@ -123,6 +200,12 @@ function PollingTool() {
                       }}
                     />
                   </div>
+                  {/* Show voters if not anonymous */}
+                  {!activePoll.isAnonymous && optionVoters.length > 0 && showResults && (
+                    <div className="voters-list">
+                      <small>👥 {optionVoters.join(', ')}</small>
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -138,6 +221,9 @@ function PollingTool() {
               <>
                 <button className="control-btn restart" onClick={() => handleStartPoll(activePoll)}>
                   🔄 Bình chọn lại
+                </button>
+                <button className="control-btn export" onClick={exportResults}>
+                  📥 Xuất kết quả
                 </button>
                 <button className="control-btn close" onClick={handleClosePoll}>
                   ✕ Đóng
@@ -201,6 +287,25 @@ function PollingTool() {
                   </button>
                 )}
               </div>
+
+              {/* Anonymous Toggle */}
+              <div className="poll-setting">
+                <label className="setting-toggle">
+                  <input
+                    type="checkbox"
+                    checked={isAnonymous}
+                    onChange={(e) => setIsAnonymous(e.target.checked)}
+                  />
+                  <span className="toggle-label">
+                    <span className="toggle-icon">🔒</span>
+                    Bình chọn ẩn danh
+                  </span>
+                </label>
+                <span className="setting-hint">
+                  Ẩn tên học sinh khi bình chọn
+                </span>
+              </div>
+
               <button
                 className="create-btn"
                 onClick={handleCreateCustomPoll}

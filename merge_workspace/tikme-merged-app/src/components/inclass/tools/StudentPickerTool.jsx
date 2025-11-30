@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
-import { mockClassStudents } from '@/utils/inclassData'
+import { useState, useEffect } from 'react'
+import { mockStudents } from '@/utils/inclassData'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './StudentPickerTool.css'
 
 function StudentPickerTool() {
+  const [isLoading, setIsLoading] = useState(true)
   const [isSpinning, setIsSpinning] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [currentHighlight, setCurrentHighlight] = useState(null)
