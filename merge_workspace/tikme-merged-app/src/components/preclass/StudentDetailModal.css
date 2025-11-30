@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-lg, 24px);
+  padding: 20px; /* Increased breathing room */
 }
 
 .modal-overlay.animate-fade {
@@ -21,7 +21,7 @@
   background: var(--bg-white, #ffffff);
   border-radius: var(--radius-xl, 16px);
   width: 90%;
-  max-width: 800px;
+  max-width: 900px; /* Increased from 800px for better content display */
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-xl, 0 20px 50px rgba(0, 0, 0, 0.25));
@@ -329,9 +329,9 @@
 
 /* TAB 2: SKILLS */
 .tab-skills {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-base, 16px);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns for better chart display */
+  gap: 24px; /* Increased gap for better spacing */
 }
 
 .skill-detail-card {
@@ -692,6 +692,16 @@
 }
 
 /* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 95vw; /* More width on tablets */
+  }
+
+  .tab-skills {
+    grid-template-columns: 1fr; /* Stack skills on tablets/mobile */
+  }
+}
+
 @media (max-width: 640px) {
   .modal-tabs {
     flex-wrap: wrap;

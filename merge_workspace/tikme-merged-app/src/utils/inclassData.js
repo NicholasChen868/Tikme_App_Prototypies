@@ -23,23 +23,23 @@ export const mockClassStudents = [
   { id: 12, name: "Đỗ Văn Phúc", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Phuc1", status: "active", mic: true, camera: true, stars: 8, handRaised: false, attendance: 'present' }
 ];
 
-// 13 Teaching Tools (8 Core + 5 Advanced)
+// 13 Teaching Tools (8 Core + 5 Advanced) - 100% Vietnamese
 export const teachingTools = [
   // Core Tools
-  { id: 'timer', name: 'Timer', icon: '⏱️', color: '#EF4444', description: 'Countdown & stopwatch timer' },
-  { id: 'picker', name: 'Student Picker', icon: '🎯', color: '#8B5CF6', description: 'Random student selection' },
-  { id: 'poll', name: 'Polling', icon: '📊', color: '#3B82F6', description: 'Live class polls' },
-  { id: 'quiz', name: 'Quiz', icon: '❓', color: '#10B981', description: 'Quick quiz & questions' },
-  { id: 'whiteboard', name: 'Whiteboard', icon: '🎨', color: '#64748B', description: 'Drawing & annotations' },
-  { id: 'flashcard', name: 'Flashcard', icon: '📇', color: '#F59E0B', description: 'Vocabulary flashcards' },
-  { id: 'attendance', name: 'Attendance', icon: '✅', color: '#06B6D4', description: 'Quick attendance check' },
-  { id: 'behavior', name: 'Behavior', icon: '⭐', color: '#EC4899', description: 'Star & point tracker' },
+  { id: 'timer', name: 'Đồng hồ', icon: '⏱️', color: '#EF4444', description: 'Đồng hồ đếm ngược và bấm giờ' },
+  { id: 'picker', name: 'Chọn ngẫu nhiên', icon: '🎯', color: '#8B5CF6', description: 'Chọn học sinh ngẫu nhiên' },
+  { id: 'poll', name: 'Bình chọn', icon: '📊', color: '#3B82F6', description: 'Bình chọn trực tiếp' },
+  { id: 'quiz', name: 'Trắc nghiệm', icon: '❓', color: '#10B981', description: 'Câu hỏi và trắc nghiệm nhanh' },
+  { id: 'whiteboard', name: 'Bảng vẽ', icon: '🎨', color: '#64748B', description: 'Bảng vẽ và ghi chú' },
+  { id: 'flashcard', name: 'Thẻ học', icon: '📇', color: '#F59E0B', description: 'Thẻ học từ vựng' },
+  { id: 'attendance', name: 'Điểm danh', icon: '✅', color: '#06B6D4', description: 'Điểm danh nhanh' },
+  { id: 'behavior', name: 'Quản lý hành vi', icon: '⭐', color: '#EC4899', description: 'Theo dõi sao và điểm' },
   // Advanced Tools
-  { id: 'groups', name: 'Groups', icon: '👥', color: '#059669', description: 'Group management' },
-  { id: 'breakout', name: 'Breakout', icon: '🚪', color: '#0891B2', description: 'Breakout rooms' },
-  { id: 'screen', name: 'Screen', icon: '🖥️', color: '#7C3AED', description: 'Screen sharing' },
-  { id: 'progress1', name: 'Activities', icon: '📋', color: '#0D9488', description: 'Lesson progress' },
-  { id: 'progress2', name: 'Students', icon: '📈', color: '#DC2626', description: 'Student progress' }
+  { id: 'groups', name: 'Chia nhóm', icon: '👥', color: '#059669', description: 'Quản lý nhóm học' },
+  { id: 'breakout', name: 'Phòng nhỏ', icon: '🚪', color: '#0891B2', description: 'Phòng học nhỏ' },
+  { id: 'screen', name: 'Chia sẻ màn hình', icon: '🖥️', color: '#7C3AED', description: 'Chia sẻ màn hình' },
+  { id: 'progress1', name: 'Tiến độ bài học', icon: '📋', color: '#0D9488', description: 'Tiến độ bài học' },
+  { id: 'progress2', name: 'Tiến độ học sinh', icon: '📈', color: '#DC2626', description: 'Tiến độ từng học sinh' }
 ];
 
 export const lessonInfo = {

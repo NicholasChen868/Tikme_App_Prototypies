@@ -29,7 +29,7 @@ function StudentCard({ student, onClick }) {
           style={{ borderColor: statusInfo.color }}
         />
         <div className="student-info">
-          <h3 className="student-name">{student.name}</h3>
+          <h3 className="student-name" title={student.name}>{student.name}</h3>
           <div className="student-badges">
             <span
               className="badge"
