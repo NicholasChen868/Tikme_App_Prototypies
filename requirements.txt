@@ -1,0 +1,8 @@
+# TikMe Prototype Management System
+# Python Dependencies
+
+# Notion API
+notion-client==2.2.1
+
+# Additional utilities
+python-dotenv==1.0.0

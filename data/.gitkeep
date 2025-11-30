@@ -1,0 +1,9 @@
+# This folder contains configuration and state files for R&D workflows
+# Required files (tracked in git):
+#   - batch_standardize.json - Batch rename configuration
+#   - component_map.json - Component dependency mapping
+#   - notion_sync_data.json - Notion sync queue
+#   - naming_rules.json - Naming validation rules
+#   - standardization_results.json - Processing logs
+#
+# See: 03_NAMING_CONVENTIONS.md line 261-271

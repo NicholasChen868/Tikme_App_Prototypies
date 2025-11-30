@@ -1,0 +1,17 @@
+{
+  "notion_token": "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",
+  "notion_database_id": "2ba2b641bddd80a1b948e54d0e888181",
+  "notion_data_source_id": "2ba2b641-bddd-8056-a829-000bb86fe20a",
+  "base_path": "D:/TECH_BOX/Tikme_App_Prototypies",
+  "iterations_path": "iterations",
+  "file_url_prefix": "file:///D:/TECH_BOX/Tikme_App_Prototypies",
+  
+  "_comments": {
+    "notion_token": "Get from environment variable NOTION_TOKEN",
+    "notion_database_id": "Database ID from Notion URL",
+    "notion_data_source_id": "Data source (collection) ID",
+    "base_path": "Absolute path to Tikme_App_Prototypies folder",
+    "iterations_path": "Relative path to iterations folder",
+    "file_url_prefix": "URL prefix for file:// links"
+  }
+}
