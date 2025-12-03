@@ -55,7 +55,12 @@ data/cache/
 temp/
 temp_react_code.txt
 test_parse.py
+convert_to_react.py
+convert_to_react_v2.py
+convert_to_react_v3.py
 nul
+resume.md
+commit_msg.txt
 
 # Old git repositories (embedded)
 Tikme_App_Prototypies_git/
