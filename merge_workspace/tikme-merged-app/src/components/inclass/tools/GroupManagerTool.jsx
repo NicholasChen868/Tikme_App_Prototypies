@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { mockClassStudents } from '@/utils/inclassData'
-import ToolLoader from '@/components/common/LoadingStates'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './GroupManagerTool.css'
 
 const groupColors = [

@@ -13,7 +13,8 @@ import {
   BreakoutRoomsTool,
   ScreenShareTool,
   ProgressTracker1Tool,
-  ProgressTracker2Tool
+  ProgressTracker2Tool,
+  JapaneseLessonTool
 } from '@/components/inclass/tools'
 import KeyboardShortcuts from '@/components/common/KeyboardShortcuts'
 import { phases, mockClassStudents, teachingTools, lessonInfo } from '@/utils/inclassData'
@@ -34,7 +35,8 @@ const toolComponents = {
   breakout: BreakoutRoomsTool,
   screen: ScreenShareTool,
   progress1: ProgressTracker1Tool,
-  progress2: ProgressTracker2Tool
+  progress2: ProgressTracker2Tool,
+  japanese: JapaneseLessonTool
 }
 
 function InClassTeaching() {

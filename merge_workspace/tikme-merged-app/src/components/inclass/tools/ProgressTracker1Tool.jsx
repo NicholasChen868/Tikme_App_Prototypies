@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import ToolLoader from '@/components/common/LoadingStates'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './ProgressTracker1Tool.css'
 
 // Default lesson activities

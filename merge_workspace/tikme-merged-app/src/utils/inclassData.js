@@ -23,7 +23,7 @@ export const mockClassStudents = [
   { id: 12, name: "Đỗ Văn Phúc", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Phuc1", status: "active", mic: true, camera: true, stars: 8, handRaised: false, attendance: 'present' }
 ];
 
-// 13 Teaching Tools (8 Core + 5 Advanced) - 100% Vietnamese
+// 14 Teaching Tools (8 Core + 6 Advanced) - 100% Vietnamese
 export const teachingTools = [
   // Core Tools
   { id: 'timer', name: 'Đồng hồ', icon: '⏱️', color: '#EF4444', description: 'Đồng hồ đếm ngược và bấm giờ' },
@@ -39,7 +39,8 @@ export const teachingTools = [
   { id: 'breakout', name: 'Phòng nhỏ', icon: '🚪', color: '#0891B2', description: 'Phòng học nhỏ' },
   { id: 'screen', name: 'Chia sẻ màn hình', icon: '🖥️', color: '#7C3AED', description: 'Chia sẻ màn hình' },
   { id: 'progress1', name: 'Tiến độ bài học', icon: '📋', color: '#0D9488', description: 'Tiến độ bài học' },
-  { id: 'progress2', name: 'Tiến độ học sinh', icon: '📈', color: '#DC2626', description: 'Tiến độ từng học sinh' }
+  { id: 'progress2', name: 'Tiến độ học sinh', icon: '📈', color: '#DC2626', description: 'Tiến độ từng học sinh' },
+  { id: 'japanese', name: 'Bài học Tiếng Nhật', icon: '🇯🇵', color: '#F59E0B', description: 'Học từ vựng và ngữ pháp Tiếng Nhật' }
 ];
 
 export const lessonInfo = {

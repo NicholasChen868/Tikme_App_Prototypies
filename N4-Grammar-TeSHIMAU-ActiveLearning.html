@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngữ Pháp N4 - ～てしまう | Tikme Learning</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', 'Noto Sans JP', sans-serif; 
+            background: linear-gradient(135deg, #FFF7ED 0%, #ECFDF5 100%);
+            min-height: 100vh;
+        }
+        .japanese { font-family: 'Noto Sans JP', sans-serif; }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(234, 88, 12, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(234, 88, 12, 0.8); }
+        }
+        .animate-in { animation: fadeInUp 0.5s ease-out; }
+        .pulse { animation: pulse 2s infinite; }
+        .shake { animation: shake 0.5s ease-in-out; }
+        .glow { animation: glow 2s infinite; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        // ==================== ICONS ====================
+        const Icons = {
+            Star: () => <span style={{fontSize: '1.2em'}}>⭐</span>,
+            Fire: () => <span style={{fontSize: '1.2em'}}>🔥</span>,
+            Check: () => <span style={{fontSize: '1.2em'}}>✅</span>,
+            Cross: () => <span style={{fontSize: '1.2em'}}>❌</span>,
+            Bulb: () => <span style={{fontSize: '1.2em'}}>💡</span>,
+            Book: () => <span style={{fontSize: '1.2em'}}>📖</span>,
+            Mic: () => <span style={{fontSize: '1.2em'}}>🎤</span>,
+            Speaker: () => <span style={{fontSize: '1.2em'}}>🔊</span>,
+            Brain: () => <span style={{fontSize: '1.2em'}}>🧠</span>,
+            Trophy: () => <span style={{fontSize: '1.2em'}}>🏆</span>,
+            Rocket: () => <span style={{fontSize: '1.2em'}}>🚀</span>,
+            Heart: () => <span style={{fontSize: '1.2em'}}>💖</span>,
+            Sad: () => <span style={{fontSize: '1.2em'}}>😢</span>,
+            Happy: () => <span style={{fontSize: '1.2em'}}>😊</span>,
+            Target: () => <span style={{fontSize: '1.2em'}}>🎯</span>,
+            Lightning: () => <span style={{fontSize: '1.2em'}}>⚡</span>,
+            Pencil: () => <span style={{fontSize: '1.2em'}}>✏️</span>,
+            Medal: () => <span style={{fontSize: '1.2em'}}>🏅</span>,
+            Sparkle: () => <span style={{fontSize: '1.2em'}}>✨</span>,
+            Warning: () => <span style={{fontSize: '1.2em'}}>⚠️</span>,
+            Info: () => <span style={{fontSize: '1.2em'}}>ℹ️</span>,
+            ArrowRight: () => <span style={{fontSize: '1em'}}>→</span>,
+            Play: () => <span style={{fontSize: '1.2em'}}>▶️</span>,
+        };
+
+        // ==================== COLORS (Anthropic-inspired) ====================
+        const colors = {
+            // Primary - Cam Anthropic
+            orange: {
+                50: '#FFF7ED',
+                100: '#FFEDD5',
+                200: '#FED7AA',
+                300: '#FDBA74',
+                400: '#FB923C',
+                500: '#F97316',
+                600: '#EA580C',
+                700: '#C2410C',
+                800: '#9A3412',
+                900: '#7C2D12',
+            },
+            // Accent - Đỏ đậm
+            red: {
+                50: '#FEF2F2',
+                100: '#FEE2E2',
+                500: '#EF4444',
+                600: '#DC2626',
+                700: '#B91C1C',
+                800: '#991B1B',
+            },
+            // Success - Xanh lá
+            green: {
+                50: '#F0FDF4',
+                100: '#DCFCE7',
+                200: '#BBF7D0',
+                400: '#4ADE80',
+                500: '#22C55E',
+                600: '#16A34A',
+                700: '#15803D',
+                800: '#166534',
+            },
+            // Neutral
+            slate: {
+                50: '#F8FAFC',
+                100: '#F1F5F9',
+                200: '#E2E8F0',
+                300: '#CBD5E1',
+                400: '#94A3B8',
+                500: '#64748B',
+                600: '#475569',
+                700: '#334155',
+                800: '#1E293B',
+                900: '#0F172A',
+            },
+            // Special
+            amber: {
+                100: '#FEF3C7',
+                400: '#FBBF24',
+                500: '#F59E0B',
+            }
+        };
+
+        // ==================== MAIN APP ====================
+        function App() {
+            const [currentStep, setCurrentStep] = useState(0);
+            const [score, setScore] = useState(0);
+            const [totalQuestions, setTotalQuestions] = useState(0);
+            const [showConfetti, setShowConfetti] = useState(false);
+            const [completedSteps, setCompletedSteps] = useState([]);
+
+            const steps = [
+                { id: 0, title: 'Khởi động', icon: <Icons.Rocket /> },
+                { id: 1, title: 'Khám phá ý nghĩa', icon: <Icons.Bulb /> },
+                { id: 2, title: 'Học cấu trúc', icon: <Icons.Book /> },
+                { id: 3, title: 'Chia động từ', icon: <Icons.Brain /> },
+                { id: 4, title: 'Luyện nghe - nói', icon: <Icons.Mic /> },
+                { id: 5, title: 'Thực hành', icon: <Icons.Pencil /> },
+                { id: 6, title: 'Kiểm tra tổng hợp', icon: <Icons.Target /> },
+                { id: 7, title: 'Kết quả', icon: <Icons.Trophy /> },
+            ];
+
+            const addScore = (points) => {
+                setScore(prev => prev + points);
+                if (points > 0) {
+                    setShowConfetti(true);
+                    setTimeout(() => setShowConfetti(false), 1000);
+                }
+            };
+
+            const completeStep = (stepId) => {
+                if (!completedSteps.includes(stepId)) {
+                    setCompletedSteps([...completedSteps, stepId]);
+                }
+            };
+
+            const nextStep = () => {
+                completeStep(currentStep);
+                setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
+            };
+
+            const prevStep = () => {
+                setCurrentStep(prev => Math.max(prev - 1, 0));
+            };
+
+            return (
+                <div style={{
+                    maxWidth: '800px',
+                    margin: '0 auto',
+                    padding: '20px',
+                    minHeight: '100vh',
+                }}>
+                    {/* Header */}
+                    <Header score={score} currentStep={currentStep} steps={steps} completedSteps={completedSteps} />
+                    
+                    {/* Progress Bar */}
+                    <ProgressBar current={currentStep} total={steps.length} />
+                    
+                    {/* Confetti Effect */}
+                    {showConfetti && <Confetti />}
+                    
+                    {/* Main Content */}
+                    <div className="animate-in" key={currentStep}>
+                        {currentStep === 0 && <Step0_Intro onNext={nextStep} />}
+                        {currentStep === 1 && <Step1_Meaning onNext={nextStep} onPrev={prevStep} addScore={addScore} />}
+                        {currentStep === 2 && <Step2_Structure onNext={nextStep} onPrev={prevStep} addScore={addScore} />}
+                        {currentStep === 3 && <Step3_Conjugation onNext={nextStep} onPrev={prevStep} addScore={addScore} />}
+                        {currentStep === 4 && <Step4_ListenSpeak onNext={nextStep} onPrev={prevStep} addScore={addScore} />}
+                        {currentStep === 5 && <Step5_Practice onNext={nextStep} onPrev={prevStep} addScore={addScore} />}
+                        {currentStep === 6 && <Step6_FinalTest onNext={nextStep} onPrev={prevStep} addScore={addScore} setTotalQuestions={setTotalQuestions} />}
+                        {currentStep === 7 && <Step7_Results score={score} totalQuestions={totalQuestions} onRestart={() => {
+                            setCurrentStep(0);
+                            setScore(0);
+                            setCompletedSteps([]);
+                        }} />}
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== HEADER ====================
+        function Header({ score, currentStep, steps, completedSteps }) {
+            return (
+                <div style={{
+                    background: 'linear-gradient(135deg, ' + colors.orange[600] + ' 0%, ' + colors.red[600] + ' 100%)',
+                    borderRadius: '20px',
+                    padding: '20px',
+                    marginBottom: '20px',
+                    color: 'white',
+                    boxShadow: '0 10px 40px rgba(234, 88, 12, 0.3)',
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                        <div>
+                            <div style={{ fontSize: '14px', opacity: 0.9, marginBottom: '5px' }}>NGỮ PHÁP N4 | TIKME</div>
+                            <div style={{ fontSize: '28px', fontWeight: '900' }} className="japanese">～てしまう</div>
+                        </div>
+                        <div style={{
+                            background: 'rgba(255,255,255,0.2)',
+                            borderRadius: '15px',
+                            padding: '10px 20px',
+                            backdropFilter: 'blur(10px)',
+                        }}>
+                            <div style={{ fontSize: '12px', opacity: 0.9 }}>ĐIỂM SỐ</div>
+                            <div style={{ fontSize: '28px', fontWeight: '700' }}>{score} <Icons.Star /></div>
+                        </div>
+                    </div>
+                    
+                    {/* Step indicators */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        {steps.map((step, idx) => (
+                            <div key={idx} style={{
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '50%',
+                                background: idx === currentStep 
+                                    ? 'white' 
+                                    : completedSteps.includes(idx) 
+                                        ? 'rgba(255,255,255,0.8)' 
+                                        : 'rgba(255,255,255,0.2)',
+                                color: idx === currentStep || completedSteps.includes(idx) ? colors.orange[600] : 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                transition: 'all 0.3s ease',
+                                transform: idx === currentStep ? 'scale(1.1)' : 'scale(1)',
+                            }}>
+                                {completedSteps.includes(idx) ? '✓' : step.icon}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== PROGRESS BAR ====================
+        function ProgressBar({ current, total }) {
+            const progress = ((current + 1) / total) * 100;
+            return (
+                <div style={{
+                    background: colors.slate[200],
+                    borderRadius: '10px',
+                    height: '8px',
+                    marginBottom: '20px',
+                    overflow: 'hidden',
+                }}>
+                    <div style={{
+                        background: 'linear-gradient(90deg, ' + colors.orange[500] + ', ' + colors.red[500] + ')',
+                        height: '100%',
+                        width: progress + '%',
+                        transition: 'width 0.5s ease',
+                        borderRadius: '10px',
+                    }} />
+                </div>
+            );
+        }
+
+        // ==================== CONFETTI ====================
+        function Confetti() {
+            const particles = ['🎉', '⭐', '✨', '🌟', '💫'];
+            return (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', zIndex: 1000 }}>
+                    {[...Array(20)].map((_, i) => (
+                        <div key={i} style={{
+                            position: 'absolute',
+                            left: Math.random() * 100 + '%',
+                            top: '50%',
+                            fontSize: '24px',
+                            animation: 'confetti 1s ease-out forwards',
+                            animationDelay: Math.random() * 0.5 + 's',
+                        }}>
+                            {particles[Math.floor(Math.random() * particles.length)]}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        // ==================== CARD COMPONENT ====================
+        function Card({ children, style = {}, highlight = false, variant = 'default' }) {
+            const variants = {
+                default: { background: 'white', border: 'none' },
+                orange: { background: colors.orange[50], border: '2px solid ' + colors.orange[200] },
+                green: { background: colors.green[50], border: '2px solid ' + colors.green[200] },
+                red: { background: colors.red[50], border: '2px solid ' + colors.red[100] },
+                amber: { background: colors.amber[100], border: '2px solid ' + colors.amber[400] },
+            };
+            
+            return (
+                <div style={{
+                    ...variants[variant],
+                    borderRadius: '16px',
+                    padding: '20px',
+                    marginBottom: '16px',
+                    boxShadow: highlight ? '0 0 0 3px ' + colors.orange[400] : '0 4px 20px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    ...style,
+                }}>
+                    {children}
+                </div>
+            );
+        }
+
+        // ==================== BUTTON ====================
+        function Button({ children, onClick, variant = 'primary', disabled = false, fullWidth = false, size = 'medium' }) {
+            const variants = {
+                primary: {
+                    background: 'linear-gradient(135deg, ' + colors.orange[500] + ', ' + colors.red[500] + ')',
+                    color: 'white',
+                },
+                secondary: {
+                    background: colors.slate[100],
+                    color: colors.slate[700],
+                },
+                success: {
+                    background: 'linear-gradient(135deg, ' + colors.green[500] + ', ' + colors.green[600] + ')',
+                    color: 'white',
+                },
+                outline: {
+                    background: 'transparent',
+                    color: colors.orange[600],
+                    border: '2px solid ' + colors.orange[400],
+                },
+            };
+            
+            const sizes = {
+                small: { padding: '8px 16px', fontSize: '14px' },
+                medium: { padding: '12px 24px', fontSize: '16px' },
+                large: { padding: '16px 32px', fontSize: '18px' },
+            };
+            
+            return (
+                <button
+                    onClick={onClick}
+                    disabled={disabled}
+                    style={{
+                        ...variants[variant],
+                        ...sizes[size],
+                        border: variants[variant].border || 'none',
+                        borderRadius: '12px',
+                        fontWeight: '600',
+                        cursor: disabled ? 'not-allowed' : 'pointer',
+                        opacity: disabled ? 0.5 : 1,
+                        width: fullWidth ? '100%' : 'auto',
+                        transition: 'all 0.2s ease',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px',
+                    }}
+                    onMouseOver={(e) => !disabled && (e.target.style.transform = 'translateY(-2px)')}
+                    onMouseOut={(e) => (e.target.style.transform = 'translateY(0)')}
+                >
+                    {children}
+                </button>
+            );
+        }
+
+        // ==================== STEP 0: INTRO ====================
+        function Step0_Intro({ onNext }) {
+            const [showStory, setShowStory] = useState(false);
+            
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                            <div style={{ fontSize: '60px', marginBottom: '20px' }}>🍰</div>
+                            <h2 style={{ color: colors.orange[700], marginBottom: '15px', fontSize: '24px' }}>
+                                Câu chuyện của bạn...
+                            </h2>
+                            <p style={{ color: colors.slate[600], lineHeight: '1.8', fontSize: '18px' }}>
+                                Bạn đã bao giờ <strong style={{color: colors.red[600]}}>ăn hết cả hộp kem</strong> rồi hối hận chưa?
+                            </p>
+                            <p style={{ color: colors.slate[600], lineHeight: '1.8', fontSize: '18px', marginTop: '10px' }}>
+                                Hay <strong style={{color: colors.green[600]}}>làm xong bài tập</strong> mà thấy tự hào?
+                            </p>
+                        </div>
+                    </Card>
+
+                    {!showStory ? (
+                        <div style={{ textAlign: 'center' }}>
+                            <Button onClick={() => setShowStory(true)} size="large">
+                                <Icons.Sparkle /> Khám phá bí mật
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="animate-in">
+                            <Card highlight>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ 
+                                        fontSize: '20px', 
+                                        color: colors.orange[600], 
+                                        marginBottom: '15px',
+                                        fontWeight: '600'
+                                    }}>
+                                        <Icons.Bulb /> Người Nhật có MỘT mẫu câu diễn tả CẢ HAI cảm xúc đó!
+                                    </div>
+                                    
+                                    <div style={{
+                                        fontSize: '48px',
+                                        fontWeight: '900',
+                                        color: colors.red[700],
+                                        margin: '20px 0',
+                                        textShadow: '2px 2px 0 ' + colors.orange[200],
+                                    }} className="japanese">
+                                        ～てしまう
+                                    </div>
+                                    
+                                    <div style={{
+                                        background: colors.amber[100],
+                                        borderRadius: '12px',
+                                        padding: '15px',
+                                        marginTop: '20px',
+                                    }}>
+                                        <div style={{ fontWeight: '600', color: colors.slate[700] }}>
+                                            <Icons.Brain /> Mẹo nhớ siêu dễ:
+                                        </div>
+                                        <div style={{ 
+                                            fontSize: '20px', 
+                                            color: colors.red[600],
+                                            marginTop: '10px',
+                                            fontWeight: '700'
+                                        }}>
+                                            "しまう" = "shi-MẤT" → Làm gì đó rồi MẤT luôn!
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                            
+                            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                                <Button onClick={onNext} size="large" variant="success">
+                                    Bắt đầu học ngay! <Icons.Rocket />
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==================== STEP 1: MEANING ====================
+        function Step1_Meaning({ onNext, onPrev, addScore }) {
+            const [selectedMeaning, setSelectedMeaning] = useState(null);
+            const [quizAnswer, setQuizAnswer] = useState(null);
+            const [showResult, setShowResult] = useState(false);
+            const [readAloud, setReadAloud] = useState({ m1: false, m2: false });
+
+            const checkAnswer = (answer) => {
+                setQuizAnswer(answer);
+                setShowResult(true);
+                if (answer === 'both') {
+                    addScore(10);
+                }
+            };
+
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ 
+                                background: colors.orange[500], 
+                                color: 'white', 
+                                padding: '5px 12px', 
+                                borderRadius: '20px',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                            }}>
+                                CHUNK 1
+                            </span>
+                            <h2 style={{ color: colors.orange[700], margin: 0 }}>
+                                <Icons.Bulb /> Khám phá 2 ý nghĩa
+                            </h2>
+                        </div>
+                    </Card>
+
+                    {/* Meaning 1 */}
+                    <Card variant="green">
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+                            <div style={{
+                                background: colors.green[500],
+                                color: 'white',
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '24px',
+                                flexShrink: 0,
+                            }}>
+                                <Icons.Happy />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <h3 style={{ color: colors.green[700], marginBottom: '10px', fontSize: '20px' }}>
+                                    ① HOÀN THÀNH TRỌN VẸN
+                                </h3>
+                                <p style={{ color: colors.slate[600], marginBottom: '10px' }}>
+                                    Diễn tả hành động đã <strong style={{color: colors.green[600]}}>hoàn tất hoàn toàn</strong>, không thể thay đổi
+                                </p>
+                                <div style={{
+                                    background: 'white',
+                                    borderRadius: '10px',
+                                    padding: '12px',
+                                    marginTop: '10px',
+                                }}>
+                                    <div style={{ color: colors.slate[500], fontSize: '14px', marginBottom: '5px' }}>
+                                        Tương đương tiếng Việt:
+                                    </div>
+                                    <div style={{ color: colors.green[700], fontWeight: '600', fontSize: '18px' }}>
+                                        "đã... xong", "đã... hết", "đã... mất rồi"
+                                    </div>
+                                </div>
+                                
+                                {/* Read Aloud Practice */}
+                                <div style={{ 
+                                    marginTop: '15px', 
+                                    background: colors.green[100], 
+                                    borderRadius: '10px', 
+                                    padding: '12px' 
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                                        <Icons.Speaker />
+                                        <span style={{ fontWeight: '600', color: colors.green[700] }}>Luyện phát âm:</span>
+                                    </div>
+                                    <div style={{ 
+                                        fontSize: '22px', 
+                                        color: colors.slate[800],
+                                        marginBottom: '10px'
+                                    }} className="japanese">
+                                        食べてしまいました
+                                    </div>
+                                    <div style={{ fontSize: '14px', color: colors.slate[500], marginBottom: '10px' }}>
+                                        ta-be-te shi-ma-i-ma-shi-ta
+                                    </div>
+                                    <Button 
+                                        variant={readAloud.m1 ? "success" : "outline"} 
+                                        size="small"
+                                        onClick={() => {
+                                            setReadAloud({...readAloud, m1: true});
+                                            if (!readAloud.m1) addScore(5);
+                                        }}
+                                    >
+                                        {readAloud.m1 ? <><Icons.Check /> Đã đọc!</> : <><Icons.Mic /> Tôi đã đọc to</>}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* Meaning 2 */}
+                    <Card variant="red">
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+                            <div style={{
+                                background: colors.red[500],
+                                color: 'white',
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '24px',
+                                flexShrink: 0,
+                            }}>
+                                <Icons.Sad />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <h3 style={{ color: colors.red[700], marginBottom: '10px', fontSize: '20px' }}>
+                                    ② TIẾC NUỐI / HỐI HẬN
+                                </h3>
+                                <p style={{ color: colors.slate[600], marginBottom: '10px' }}>
+                                    Diễn tả <strong style={{color: colors.red[600]}}>sự đáng tiếc, hối hận</strong> về việc đã xảy ra
+                                </p>
+                                <div style={{
+                                    background: 'white',
+                                    borderRadius: '10px',
+                                    padding: '12px',
+                                    marginTop: '10px',
+                                }}>
+                                    <div style={{ color: colors.slate[500], fontSize: '14px', marginBottom: '5px' }}>
+                                        Tương đương tiếng Việt:
+                                    </div>
+                                    <div style={{ color: colors.red[700], fontWeight: '600', fontSize: '18px' }}>
+                                        "lỡ...", "đã lỡ...", "mất rồi"
+                                    </div>
+                                </div>
+                                
+                                {/* Read Aloud Practice */}
+                                <div style={{ 
+                                    marginTop: '15px', 
+                                    background: colors.red[100], 
+                                    borderRadius: '10px', 
+                                    padding: '12px' 
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                                        <Icons.Speaker />
+                                        <span style={{ fontWeight: '600', color: colors.red[700] }}>Luyện phát âm:</span>
+                                    </div>
+                                    <div style={{ 
+                                        fontSize: '22px', 
+                                        color: colors.slate[800],
+                                        marginBottom: '10px'
+                                    }} className="japanese">
+                                        なくしてしまいました
+                                    </div>
+                                    <div style={{ fontSize: '14px', color: colors.slate[500], marginBottom: '10px' }}>
+                                        na-ku-shi-te shi-ma-i-ma-shi-ta
+                                    </div>
+                                    <Button 
+                                        variant={readAloud.m2 ? "success" : "outline"} 
+                                        size="small"
+                                        onClick={() => {
+                                            setReadAloud({...readAloud, m2: true});
+                                            if (!readAloud.m2) addScore(5);
+                                        }}
+                                    >
+                                        {readAloud.m2 ? <><Icons.Check /> Đã đọc!</> : <><Icons.Mic /> Tôi đã đọc to</>}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* Quick Quiz */}
+                    <Card highlight>
+                        <div style={{ textAlign: 'center' }}>
+                            <div style={{ 
+                                display: 'inline-flex', 
+                                alignItems: 'center', 
+                                gap: '8px',
+                                background: colors.orange[100],
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                marginBottom: '15px'
+                            }}>
+                                <Icons.Target /> <strong style={{color: colors.orange[700]}}>MINI QUIZ (+10 điểm)</strong>
+                            </div>
+                            
+                            <h3 style={{ color: colors.slate[800], marginBottom: '20px' }}>
+                                ～てしまう có mấy ý nghĩa chính?
+                            </h3>
+                            
+                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                {['1', '2', '3'].map((opt) => (
+                                    <button
+                                        key={opt}
+                                        onClick={() => checkAnswer(opt === '2' ? 'both' : opt)}
+                                        disabled={showResult}
+                                        style={{
+                                            padding: '15px 30px',
+                                            fontSize: '20px',
+                                            fontWeight: '600',
+                                            border: '2px solid ' + (
+                                                showResult && opt === '2' ? colors.green[500] :
+                                                showResult && quizAnswer === opt && opt !== '2' ? colors.red[500] :
+                                                colors.slate[300]
+                                            ),
+                                            borderRadius: '12px',
+                                            background: showResult && opt === '2' ? colors.green[100] :
+                                                showResult && quizAnswer === opt && opt !== '2' ? colors.red[100] :
+                                                'white',
+                                            cursor: showResult ? 'default' : 'pointer',
+                                            transition: 'all 0.2s ease',
+                                        }}
+                                    >
+                                        {opt} ý nghĩa
+                                    </button>
+                                ))}
+                            </div>
+                            
+                            {showResult && (
+                                <div style={{
+                                    marginTop: '20px',
+                                    padding: '15px',
+                                    borderRadius: '12px',
+                                    background: quizAnswer === 'both' ? colors.green[100] : colors.red[100],
+                                }} className="animate-in">
+                                    {quizAnswer === 'both' ? (
+                                        <div style={{ color: colors.green[700] }}>
+                                            <Icons.Check /> <strong>Chính xác!</strong> ～てしまう có 2 ý nghĩa: Hoàn thành & Tiếc nuối
+                                        </div>
+                                    ) : (
+                                        <div style={{ color: colors.red[700] }}>
+                                            <Icons.Cross /> Đáp án đúng là <strong>2 ý nghĩa</strong>: Hoàn thành & Tiếc nuối
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </Card>
+
+                    {/* Navigation */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                        <Button variant="secondary" onClick={onPrev}>← Quay lại</Button>
+                        <Button 
+                            onClick={onNext} 
+                            disabled={!showResult || !readAloud.m1 || !readAloud.m2}
+                        >
+                            Tiếp theo <Icons.ArrowRight />
+                        </Button>
+                    </div>
+                    
+                    {(!readAloud.m1 || !readAloud.m2) && showResult && (
+                        <div style={{ 
+                            textAlign: 'center', 
+                            marginTop: '10px', 
+                            color: colors.orange[600],
+                            fontSize: '14px'
+                        }}>
+                            <Icons.Warning /> Hãy đọc to cả 2 ví dụ để tiếp tục!
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==================== STEP 2: STRUCTURE ====================
+        function Step2_Structure({ onNext, onPrev, addScore }) {
+            const [showShortForm, setShowShortForm] = useState(false);
+            const [quizDone, setQuizDone] = useState(false);
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+            const handleQuiz = (answer) => {
+                setSelectedAnswer(answer);
+                setQuizDone(true);
+                if (answer === 'correct') {
+                    addScore(10);
+                }
+            };
+
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ 
+                                background: colors.orange[500], 
+                                color: 'white', 
+                                padding: '5px 12px', 
+                                borderRadius: '20px',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                            }}>
+                                CHUNK 2
+                            </span>
+                            <h2 style={{ color: colors.orange[700], margin: 0 }}>
+                                <Icons.Book /> Cấu trúc ngữ pháp
+                            </h2>
+                        </div>
+                    </Card>
+
+                    {/* Main Structure */}
+                    <Card highlight>
+                        <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                            <div style={{ fontSize: '14px', color: colors.slate[500], marginBottom: '10px' }}>
+                                CÔNG THỨC VÀNG
+                            </div>
+                            <div style={{
+                                fontSize: '32px',
+                                fontWeight: '800',
+                                color: colors.orange[700],
+                                marginBottom: '15px',
+                            }} className="japanese">
+                                <span style={{ 
+                                    background: colors.green[100], 
+                                    padding: '5px 15px', 
+                                    borderRadius: '10px',
+                                    color: colors.green[700]
+                                }}>
+                                    Động từ thể て
+                                </span>
+                                <span style={{ margin: '0 10px', color: colors.slate[400] }}>＋</span>
+                                <span style={{ 
+                                    background: colors.red[100], 
+                                    padding: '5px 15px', 
+                                    borderRadius: '10px',
+                                    color: colors.red[700]
+                                }}>
+                                    しまう
+                                </span>
+                            </div>
+                            
+                            <div style={{
+                                background: colors.amber[100],
+                                borderRadius: '12px',
+                                padding: '15px',
+                                marginTop: '20px',
+                                display: 'inline-block'
+                            }}>
+                                <Icons.Lightning /> <strong>Nhớ nhanh:</strong> Thể て + しまう = XONG MẤT!
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* Short Form Toggle */}
+                    <Card>
+                        <div style={{ 
+                            display: 'flex', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center',
+                            marginBottom: showShortForm ? '20px' : 0
+                        }}>
+                            <h3 style={{ color: colors.slate[800] }}>
+                                <Icons.Fire /> Dạng rút gọn (口語 - Khẩu ngữ)
+                            </h3>
+                            <Button 
+                                variant={showShortForm ? "success" : "primary"} 
+                                size="small"
+                                onClick={() => {
+                                    if (!showShortForm) addScore(5);
+                                    setShowShortForm(true);
+                                }}
+                            >
+                                {showShortForm ? 'Đã mở khóa!' : 'Mở khóa +5đ'}
+                            </Button>
+                        </div>
+                        
+                        {showShortForm && (
+                            <div className="animate-in">
+                                <div style={{ 
+                                    display: 'grid', 
+                                    gridTemplateColumns: '1fr 1fr', 
+                                    gap: '15px',
+                                    marginBottom: '15px'
+                                }}>
+                                    <div style={{
+                                        background: colors.slate[100],
+                                        borderRadius: '12px',
+                                        padding: '15px',
+                                        textAlign: 'center'
+                                    }}>
+                                        <div style={{ fontSize: '14px', color: colors.slate[500], marginBottom: '8px' }}>
+                                            Dạng đầy đủ
+                                        </div>
+                                        <div style={{ fontSize: '24px', fontWeight: '700' }} className="japanese">
+                                            ～てしまう
+                                        </div>
+                                    </div>
+                                    <div style={{
+                                        background: colors.orange[100],
+                                        borderRadius: '12px',
+                                        padding: '15px',
+                                        textAlign: 'center',
+                                        border: '2px solid ' + colors.orange[300]
+                                    }}>
+                                        <div style={{ fontSize: '14px', color: colors.orange[600], marginBottom: '8px' }}>
+                                            Dạng rút gọn ⭐
+                                        </div>
+                                        <div style={{ fontSize: '24px', fontWeight: '700', color: colors.orange[700] }} className="japanese">
+                                            ～ちゃう
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div style={{ 
+                                    display: 'grid', 
+                                    gridTemplateColumns: '1fr 1fr', 
+                                    gap: '15px' 
+                                }}>
+                                    <div style={{
+                                        background: colors.slate[100],
+                                        borderRadius: '12px',
+                                        padding: '15px',
+                                        textAlign: 'center'
+                                    }}>
+                                        <div style={{ fontSize: '24px', fontWeight: '700' }} className="japanese">
+                                            ～でしまう
+                                        </div>
+                                    </div>
+                                    <div style={{
+                                        background: colors.orange[100],
+                                        borderRadius: '12px',
+                                        padding: '15px',
+                                        textAlign: 'center',
+                                        border: '2px solid ' + colors.orange[300]
+                                    }}>
+                                        <div style={{ fontSize: '24px', fontWeight: '700', color: colors.orange[700] }} className="japanese">
+                                            ～じゃう
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div style={{
+                                    marginTop: '15px',
+                                    padding: '12px',
+                                    background: colors.red[50],
+                                    borderRadius: '10px',
+                                    borderLeft: '4px solid ' + colors.red[500]
+                                }}>
+                                    <Icons.Warning /> <strong style={{color: colors.red[700]}}>Lưu ý:</strong>
+                                    <span style={{color: colors.slate[600]}}> Dạng rút gọn chỉ dùng với bạn bè, KHÔNG dùng với sếp/người lớn tuổi!</span>
+                                </div>
+                            </div>
+                        )}
+                    </Card>
+
+                    {/* Quiz */}
+                    {showShortForm && (
+                        <Card variant="amber" className="animate-in">
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ marginBottom: '15px' }}>
+                                    <Icons.Target /> <strong>THỰC HÀNH (+10 điểm)</strong>
+                                </div>
+                                <div style={{ fontSize: '20px', marginBottom: '20px', color: colors.slate[800] }}>
+                                    <span className="japanese">食べてしまう</span> rút gọn thành?
+                                </div>
+                                
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                                    {[
+                                        { text: '食べちゃう', value: 'correct' },
+                                        { text: '食べじゃう', value: 'wrong1' },
+                                        { text: '食べしまう', value: 'wrong2' },
+                                    ].map((opt) => (
+                                        <button
+                                            key={opt.value}
+                                            onClick={() => handleQuiz(opt.value)}
+                                            disabled={quizDone}
+                                            className="japanese"
+                                            style={{
+                                                padding: '12px 20px',
+                                                fontSize: '20px',
+                                                border: '2px solid ' + (
+                                                    quizDone && opt.value === 'correct' ? colors.green[500] :
+                                                    quizDone && selectedAnswer === opt.value && opt.value !== 'correct' ? colors.red[500] :
+                                                    colors.slate[300]
+                                                ),
+                                                borderRadius: '12px',
+                                                background: quizDone && opt.value === 'correct' ? colors.green[100] :
+                                                    quizDone && selectedAnswer === opt.value && opt.value !== 'correct' ? colors.red[100] :
+                                                    'white',
+                                                cursor: quizDone ? 'default' : 'pointer',
+                                            }}
+                                        >
+                                            {opt.text}
+                                        </button>
+                                    ))}
+                                </div>
+                                
+                                {quizDone && (
+                                    <div style={{ marginTop: '15px' }} className="animate-in">
+                                        {selectedAnswer === 'correct' ? (
+                                            <span style={{color: colors.green[600]}}><Icons.Check /> Xuất sắc!</span>
+                                        ) : (
+                                            <span style={{color: colors.red[600]}}>
+                                                <Icons.Cross /> Đáp án: <strong className="japanese">食べちゃう</strong> (て→ちゃ)
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </Card>
+                    )}
+
+                    {/* Navigation */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                        <Button variant="secondary" onClick={onPrev}>← Quay lại</Button>
+                        <Button onClick={onNext} disabled={!quizDone}>
+                            Tiếp theo <Icons.ArrowRight />
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== STEP 3: CONJUGATION ====================
+        function Step3_Conjugation({ onNext, onPrev, addScore }) {
+            const [activeGroup, setActiveGroup] = useState(1);
+            const [quizAnswers, setQuizAnswers] = useState({});
+            const [showAnswers, setShowAnswers] = useState(false);
+
+            const groups = {
+                1: {
+                    title: 'Nhóm 1 (五段 Godan)',
+                    color: colors.orange,
+                    rules: [
+                        { ending: 'う・つ・る', change: '→ って', example: '買う', result: '買ってしまう' },
+                        { ending: 'む・ぶ・ぬ', change: '→ んで', example: '読む', result: '読んでしまう' },
+                        { ending: 'く', change: '→ いて', example: '書く', result: '書いてしまう' },
+                        { ending: 'ぐ', change: '→ いで', example: '泳ぐ', result: '泳いでしまう' },
+                        { ending: 'す', change: '→ して', example: '話す', result: '話してしまう' },
+                    ]
+                },
+                2: {
+                    title: 'Nhóm 2 (一段 Ichidan)',
+                    color: colors.green,
+                    rules: [
+                        { ending: 'る', change: '→ て', example: '食べる', result: '食べてしまう' },
+                        { ending: 'る', change: '→ て', example: '見る', result: '見てしまう' },
+                        { ending: 'る', change: '→ て', example: '忘れる', result: '忘れてしまう' },
+                    ]
+                },
+                3: {
+                    title: 'Nhóm 3 (Bất quy tắc)',
+                    color: colors.red,
+                    rules: [
+                        { ending: 'する', change: '→ して', example: 'する', result: 'してしまう' },
+                        { ending: '来る', change: '→ 来て', example: '来る', result: '来てしまう' },
+                    ]
+                }
+            };
+
+            const quizItems = [
+                { verb: '飲む', group: 1, answer: '飲んでしまう' },
+                { verb: '起きる', group: 2, answer: '起きてしまう' },
+                { verb: '勉強する', group: 3, answer: '勉強してしまう' },
+            ];
+
+            const checkQuiz = () => {
+                setShowAnswers(true);
+                let correct = 0;
+                quizItems.forEach((item, idx) => {
+                    if (quizAnswers[idx] === item.answer) correct++;
+                });
+                addScore(correct * 5);
+            };
+
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ 
+                                background: colors.orange[500], 
+                                color: 'white', 
+                                padding: '5px 12px', 
+                                borderRadius: '20px',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                            }}>
+                                CHUNK 3
+                            </span>
+                            <h2 style={{ color: colors.orange[700], margin: 0 }}>
+                                <Icons.Brain /> Cách chia động từ
+                            </h2>
+                        </div>
+                    </Card>
+
+                    {/* Group Tabs */}
+                    <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+                        {[1, 2, 3].map(g => (
+                            <button
+                                key={g}
+                                onClick={() => setActiveGroup(g)}
+                                style={{
+                                    flex: 1,
+                                    padding: '12px',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    background: activeGroup === g ? groups[g].color[500] : groups[g].color[100],
+                                    color: activeGroup === g ? 'white' : groups[g].color[700],
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                }}
+                            >
+                                Nhóm {g}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Active Group Content */}
+                    <Card style={{ borderTop: '4px solid ' + groups[activeGroup].color[500] }}>
+                        <h3 style={{ color: groups[activeGroup].color[700], marginBottom: '15px' }}>
+                            {groups[activeGroup].title}
+                        </h3>
+                        
+                        {activeGroup === 2 && (
+                            <div style={{
+                                background: colors.green[100],
+                                padding: '10px 15px',
+                                borderRadius: '10px',
+                                marginBottom: '15px',
+                                color: colors.green[700]
+                            }}>
+                                <Icons.Sparkle /> <strong>Đơn giản nhất!</strong> Chỉ cần bỏ る rồi thêm てしまう
+                            </div>
+                        )}
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {groups[activeGroup].rules.map((rule, idx) => (
+                                <div key={idx} style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '80px 80px 1fr 1fr',
+                                    gap: '10px',
+                                    alignItems: 'center',
+                                    padding: '12px',
+                                    background: idx % 2 === 0 ? groups[activeGroup].color[50] : 'white',
+                                    borderRadius: '10px',
+                                }}>
+                                    <div style={{ 
+                                        fontWeight: '600', 
+                                        color: groups[activeGroup].color[700],
+                                        fontSize: '14px'
+                                    }} className="japanese">
+                                        {rule.ending}
+                                    </div>
+                                    <div style={{ 
+                                        color: groups[activeGroup].color[500],
+                                        fontWeight: '700'
+                                    }} className="japanese">
+                                        {rule.change}
+                                    </div>
+                                    <div className="japanese" style={{ color: colors.slate[600] }}>
+                                        {rule.example}
+                                    </div>
+                                    <div className="japanese" style={{ 
+                                        fontWeight: '700', 
+                                        color: groups[activeGroup].color[700],
+                                        background: groups[activeGroup].color[100],
+                                        padding: '5px 10px',
+                                        borderRadius: '8px',
+                                        textAlign: 'center'
+                                    }}>
+                                        {rule.result}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+
+                    {/* Mini Quiz */}
+                    <Card variant="amber">
+                        <div style={{ marginBottom: '15px' }}>
+                            <Icons.Pencil /> <strong>LUYỆN TẬP NHANH (+5đ mỗi câu đúng)</strong>
+                        </div>
+                        
+                        {quizItems.map((item, idx) => (
+                            <div key={idx} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '15px',
+                                marginBottom: '12px',
+                                padding: '12px',
+                                background: 'white',
+                                borderRadius: '10px',
+                            }}>
+                                <span className="japanese" style={{ 
+                                    fontWeight: '600',
+                                    minWidth: '80px'
+                                }}>
+                                    {item.verb}
+                                </span>
+                                <Icons.ArrowRight />
+                                <input
+                                    type="text"
+                                    placeholder="Nhập đáp án..."
+                                    value={quizAnswers[idx] || ''}
+                                    onChange={(e) => setQuizAnswers({...quizAnswers, [idx]: e.target.value})}
+                                    disabled={showAnswers}
+                                    className="japanese"
+                                    style={{
+                                        flex: 1,
+                                        padding: '10px',
+                                        border: '2px solid ' + (
+                                            showAnswers && quizAnswers[idx] === item.answer ? colors.green[400] :
+                                            showAnswers && quizAnswers[idx] !== item.answer ? colors.red[400] :
+                                            colors.slate[300]
+                                        ),
+                                        borderRadius: '8px',
+                                        fontSize: '18px',
+                                        background: showAnswers && quizAnswers[idx] === item.answer ? colors.green[50] :
+                                            showAnswers ? colors.red[50] : 'white',
+                                    }}
+                                />
+                                {showAnswers && quizAnswers[idx] !== item.answer && (
+                                    <span className="japanese" style={{ color: colors.green[600], fontWeight: '600' }}>
+                                        {item.answer}
+                                    </span>
+                                )}
+                            </div>
+                        ))}
+                        
+                        {!showAnswers ? (
+                            <Button onClick={checkQuiz} fullWidth variant="primary">
+                                <Icons.Check /> Kiểm tra đáp án
+                            </Button>
+                        ) : (
+                            <div style={{ 
+                                textAlign: 'center', 
+                                padding: '10px',
+                                background: colors.green[100],
+                                borderRadius: '10px',
+                                color: colors.green[700]
+                            }}>
+                                <Icons.Check /> Đã hoàn thành! Xem đáp án ở trên.
+                            </div>
+                        )}
+                    </Card>
+
+                    {/* Navigation */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                        <Button variant="secondary" onClick={onPrev}>← Quay lại</Button>
+                        <Button onClick={onNext} disabled={!showAnswers}>
+                            Tiếp theo <Icons.ArrowRight />
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== STEP 4: LISTEN & SPEAK ====================
+        function Step4_ListenSpeak({ onNext, onPrev, addScore }) {
+            const [completedSentences, setCompletedSentences] = useState([]);
+            
+            const sentences = [
+                {
+                    jp: '宿題を全部やってしまいました。',
+                    pronunciation: 'しゅくだい を ぜんぶ やって しまいました',
+                    meaning: 'Tôi đã làm xong hết bài tập rồi.',
+                    emotion: 'happy',
+                    tip: 'Nhấn mạnh "やって" với giọng tự hào!'
+                },
+                {
+                    jp: '財布をなくしてしまいました。',
+                    pronunciation: 'さいふ を なくして しまいました',
+                    meaning: 'Tôi đã lỡ làm mất ví rồi.',
+                    emotion: 'sad',
+                    tip: 'Nói với giọng buồn, tiếc nuối ở cuối câu!'
+                },
+                {
+                    jp: 'ケーキを全部食べちゃった！',
+                    pronunciation: 'けーき を ぜんぶ たべちゃった',
+                    meaning: 'Tớ ăn hết sạch bánh rồi!',
+                    emotion: 'casual',
+                    tip: 'Giọng thân mật, vui vẻ hoặc hơi áy náy!'
+                },
+            ];
+
+            const markComplete = (idx) => {
+                if (!completedSentences.includes(idx)) {
+                    setCompletedSentences([...completedSentences, idx]);
+                    addScore(10);
+                }
+            };
+
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ 
+                                background: colors.orange[500], 
+                                color: 'white', 
+                                padding: '5px 12px', 
+                                borderRadius: '20px',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                            }}>
+                                CHUNK 4
+                            </span>
+                            <h2 style={{ color: colors.orange[700], margin: 0 }}>
+                                <Icons.Mic /> Luyện nghe - nói
+                            </h2>
+                        </div>
+                        <p style={{ color: colors.slate[600] }}>
+                            Đọc to mỗi câu <strong>3 lần</strong> với đúng cảm xúc để ghi nhớ tốt hơn!
+                        </p>
+                    </Card>
+
+                    {sentences.map((s, idx) => (
+                        <Card 
+                            key={idx} 
+                            variant={s.emotion === 'happy' ? 'green' : s.emotion === 'sad' ? 'red' : 'orange'}
+                            highlight={completedSentences.includes(idx)}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+                                <div style={{
+                                    fontSize: '32px',
+                                    flexShrink: 0,
+                                }}>
+                                    {s.emotion === 'happy' ? '😊' : s.emotion === 'sad' ? '😢' : '😄'}
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <div className="japanese" style={{ 
+                                        fontSize: '24px', 
+                                        fontWeight: '700',
+                                        marginBottom: '8px',
+                                        color: colors.slate[800]
+                                    }}>
+                                        {s.jp}
+                                    </div>
+                                    <div style={{ 
+                                        fontSize: '14px', 
+                                        color: colors.slate[500],
+                                        marginBottom: '8px'
+                                    }} className="japanese">
+                                        {s.pronunciation}
+                                    </div>
+                                    <div style={{ 
+                                        fontSize: '16px',
+                                        color: colors.slate[600],
+                                        marginBottom: '12px'
+                                    }}>
+                                        → {s.meaning}
+                                    </div>
+                                    <div style={{
+                                        background: colors.amber[100],
+                                        padding: '10px',
+                                        borderRadius: '8px',
+                                        fontSize: '14px',
+                                        marginBottom: '12px'
+                                    }}>
+                                        <Icons.Bulb /> <strong>Mẹo:</strong> {s.tip}
+                                    </div>
+                                    <Button
+                                        variant={completedSentences.includes(idx) ? "success" : "outline"}
+                                        onClick={() => markComplete(idx)}
+                                        size="small"
+                                    >
+                                        {completedSentences.includes(idx) ? (
+                                            <><Icons.Check /> Đã đọc 3 lần! +10đ</>
+                                        ) : (
+                                            <><Icons.Mic /> Tôi đã đọc to 3 lần</>
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
+                        </Card>
+                    ))}
+
+                    {/* Progress indicator */}
+                    <div style={{
+                        textAlign: 'center',
+                        padding: '15px',
+                        background: colors.slate[100],
+                        borderRadius: '12px',
+                        marginBottom: '20px'
+                    }}>
+                        <strong>Tiến độ:</strong> {completedSentences.length}/{sentences.length} câu
+                        <div style={{
+                            background: colors.slate[200],
+                            borderRadius: '10px',
+                            height: '8px',
+                            marginTop: '10px',
+                            overflow: 'hidden'
+                        }}>
+                            <div style={{
+                                background: colors.green[500],
+                                height: '100%',
+                                width: (completedSentences.length / sentences.length * 100) + '%',
+                                transition: 'width 0.3s ease'
+                            }} />
+                        </div>
+                    </div>
+
+                    {/* Navigation */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                        <Button variant="secondary" onClick={onPrev}>← Quay lại</Button>
+                        <Button onClick={onNext} disabled={completedSentences.length < sentences.length}>
+                            Tiếp theo <Icons.ArrowRight />
+                        </Button>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== STEP 5: PRACTICE ====================
+        function Step5_Practice({ onNext, onPrev, addScore }) {
+            const [currentQ, setCurrentQ] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [showFeedback, setShowFeedback] = useState(false);
+
+            const questions = [
+                {
+                    type: 'meaning',
+                    question: 'Câu này mang ý nghĩa gì?',
+                    sentence: '試験に落ちてしまいました。',
+                    options: ['Hoàn thành (tích cực)', 'Tiếc nuối (tiêu cực)'],
+                    correct: 1,
+                    explanation: '"Rớt kỳ thi" là điều đáng tiếc → Ý nghĩa tiếc nuối'
+                },
+                {
+                    type: 'fill',
+                    question: 'Điền vào chỗ trống:',
+                    sentence: '電車で寝___しまいました。',
+                    options: ['て', 'で', 'って'],
+                    correct: 0,
+                    explanation: '寝る (nhóm 2) → 寝て + しまう'
+                },
+                {
+                    type: 'transform',
+                    question: 'Chuyển sang dạng rút gọn:',
+                    sentence: '忘れてしまった',
+                    options: ['忘れちゃった', '忘れじゃった', '忘れしまった'],
+                    correct: 0,
+                    explanation: 'て + しまう → ちゃう'
+                },
+            ];
+
+            const handleAnswer = (optionIdx) => {
+                const newAnswers = { ...answers, [currentQ]: optionIdx };
+                setAnswers(newAnswers);
+                setShowFeedback(true);
+                
+                if (optionIdx === questions[currentQ].correct) {
+                    addScore(10);
+                }
+            };
+
+            const nextQuestion = () => {
+                setShowFeedback(false);
+                if (currentQ < questions.length - 1) {
+                    setCurrentQ(currentQ + 1);
+                }
+            };
+
+            const q = questions[currentQ];
+
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ 
+                                background: colors.orange[500], 
+                                color: 'white', 
+                                padding: '5px 12px', 
+                                borderRadius: '20px',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                            }}>
+                                CHUNK 5
+                            </span>
+                            <h2 style={{ color: colors.orange[700], margin: 0 }}>
+                                <Icons.Pencil /> Thực hành tổng hợp
+                            </h2>
+                        </div>
+                        <div style={{ color: colors.slate[600] }}>
+                            Câu {currentQ + 1}/{questions.length} | +10đ mỗi câu đúng
+                        </div>
+                    </Card>
+
+                    <Card highlight>
+                        <div style={{ 
+                            fontSize: '14px', 
+                            color: colors.orange[600],
+                            marginBottom: '10px',
+                            fontWeight: '600'
+                        }}>
+                            {q.type === 'meaning' ? '📝 PHÂN BIỆT Ý NGHĨA' : 
+                             q.type === 'fill' ? '✏️ ĐIỀN VÀO CHỖ TRỐNG' : '🔄 CHUYỂN ĐỔI'}
+                        </div>
+                        
+                        <div style={{ fontSize: '18px', marginBottom: '15px', color: colors.slate[700] }}>
+                            {q.question}
+                        </div>
+                        
+                        <div className="japanese" style={{
+                            fontSize: '28px',
+                            fontWeight: '700',
+                            textAlign: 'center',
+                            padding: '20px',
+                            background: colors.slate[50],
+                            borderRadius: '12px',
+                            marginBottom: '20px',
+                            color: colors.slate[800]
+                        }}>
+                            {q.sentence}
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {q.options.map((opt, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => !showFeedback && handleAnswer(idx)}
+                                    disabled={showFeedback}
+                                    className={q.type !== 'meaning' ? 'japanese' : ''}
+                                    style={{
+                                        padding: '15px 20px',
+                                        fontSize: '18px',
+                                        border: '2px solid ' + (
+                                            showFeedback && idx === q.correct ? colors.green[500] :
+                                            showFeedback && answers[currentQ] === idx && idx !== q.correct ? colors.red[500] :
+                                            colors.slate[300]
+                                        ),
+                                        borderRadius: '12px',
+                                        background: showFeedback && idx === q.correct ? colors.green[100] :
+                                            showFeedback && answers[currentQ] === idx && idx !== q.correct ? colors.red[100] :
+                                            'white',
+                                        cursor: showFeedback ? 'default' : 'pointer',
+                                        textAlign: 'left',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                >
+                                    {opt}
+                                    {showFeedback && idx === q.correct && ' ✅'}
+                                    {showFeedback && answers[currentQ] === idx && idx !== q.correct && ' ❌'}
+                                </button>
+                            ))}
+                        </div>
+
+                        {showFeedback && (
+                            <div style={{
+                                marginTop: '20px',
+                                padding: '15px',
+                                background: answers[currentQ] === q.correct ? colors.green[50] : colors.amber[100],
+                                borderRadius: '12px',
+                                borderLeft: '4px solid ' + (answers[currentQ] === q.correct ? colors.green[500] : colors.amber[500])
+                            }} className="animate-in">
+                                <div style={{ fontWeight: '600', marginBottom: '5px' }}>
+                                    {answers[currentQ] === q.correct ? (
+                                        <span style={{color: colors.green[700]}}><Icons.Check /> Chính xác! +10 điểm</span>
+                                    ) : (
+                                        <span style={{color: colors.amber[700]}}><Icons.Bulb /> Giải thích:</span>
+                                    )}
+                                </div>
+                                <div style={{ color: colors.slate[600] }}>{q.explanation}</div>
+                            </div>
+                        )}
+                    </Card>
+
+                    {/* Navigation */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                        <Button variant="secondary" onClick={onPrev}>← Quay lại</Button>
+                        {showFeedback && currentQ < questions.length - 1 ? (
+                            <Button onClick={nextQuestion}>
+                                Câu tiếp theo <Icons.ArrowRight />
+                            </Button>
+                        ) : showFeedback && currentQ === questions.length - 1 ? (
+                            <Button onClick={onNext} variant="success">
+                                Kiểm tra cuối <Icons.Trophy />
+                            </Button>
+                        ) : null}
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== STEP 6: FINAL TEST ====================
+        function Step6_FinalTest({ onNext, onPrev, addScore, setTotalQuestions }) {
+            const [answers, setAnswers] = useState({});
+            const [submitted, setSubmitted] = useState(false);
+            const [score, setScore] = useState(0);
+
+            const questions = [
+                { q: 'てしまう có mấy ý nghĩa chính?', opts: ['1', '2', '3'], correct: 1 },
+                { q: '食べる → ～てしまう?', opts: ['食べってしまう', '食べてしまう', '食べでしまう'], correct: 1, jp: true },
+                { q: '読む → ～てしまう?', opts: ['読んでしまう', '読いてしまう', '読してしまう'], correct: 0, jp: true },
+                { q: 'Dạng rút gọn của てしまう là?', opts: ['ちゃう', 'しゃう', 'ちゅう'], correct: 0, jp: true },
+                { q: '「なくしてしまった」nghĩa là?', opts: ['Đã hoàn thành (vui)', 'Đã lỡ làm mất (tiếc)'], correct: 1 },
+            ];
+
+            useEffect(() => {
+                setTotalQuestions(questions.length);
+            }, []);
+
+            const handleSubmit = () => {
+                let correct = 0;
+                questions.forEach((q, idx) => {
+                    if (answers[idx] === q.correct) correct++;
+                });
+                setScore(correct);
+                addScore(correct * 20);
+                setSubmitted(true);
+            };
+
+            return (
+                <div>
+                    <Card variant="orange">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <span style={{ 
+                                background: colors.red[500], 
+                                color: 'white', 
+                                padding: '5px 12px', 
+                                borderRadius: '20px',
+                                fontSize: '14px',
+                                fontWeight: '600'
+                            }}>
+                                BÀI KIỂM TRA
+                            </span>
+                            <h2 style={{ color: colors.orange[700], margin: 0 }}>
+                                <Icons.Target /> Kiểm tra tổng hợp
+                            </h2>
+                        </div>
+                        <p style={{ color: colors.slate[600] }}>
+                            {questions.length} câu hỏi | +20đ mỗi câu đúng | Tổng: +{questions.length * 20}đ
+                        </p>
+                    </Card>
+
+                    {questions.map((q, idx) => (
+                        <Card key={idx} variant={submitted ? (answers[idx] === q.correct ? 'green' : 'red') : 'default'}>
+                            <div style={{ fontWeight: '600', marginBottom: '12px', color: colors.slate[800] }}>
+                                Câu {idx + 1}: {q.q}
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {q.opts.map((opt, optIdx) => (
+                                    <label 
+                                        key={optIdx}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            padding: '12px',
+                                            borderRadius: '10px',
+                                            cursor: submitted ? 'default' : 'pointer',
+                                            background: submitted && optIdx === q.correct ? colors.green[100] :
+                                                submitted && answers[idx] === optIdx && optIdx !== q.correct ? colors.red[100] :
+                                                answers[idx] === optIdx ? colors.orange[100] : colors.slate[50],
+                                            border: '2px solid ' + (
+                                                submitted && optIdx === q.correct ? colors.green[400] :
+                                                submitted && answers[idx] === optIdx && optIdx !== q.correct ? colors.red[400] :
+                                                answers[idx] === optIdx ? colors.orange[400] : 'transparent'
+                                            ),
+                                        }}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name={`q${idx}`}
+                                            checked={answers[idx] === optIdx}
+                                            onChange={() => !submitted && setAnswers({...answers, [idx]: optIdx})}
+                                            disabled={submitted}
+                                        />
+                                        <span className={q.jp ? 'japanese' : ''} style={{ fontSize: '16px' }}>
+                                            {opt}
+                                        </span>
+                                        {submitted && optIdx === q.correct && ' ✅'}
+                                        {submitted && answers[idx] === optIdx && optIdx !== q.correct && ' ❌'}
+                                    </label>
+                                ))}
+                            </div>
+                        </Card>
+                    ))}
+
+                    {!submitted ? (
+                        <Button 
+                            onClick={handleSubmit} 
+                            fullWidth 
+                            size="large"
+                            disabled={Object.keys(answers).length < questions.length}
+                        >
+                            <Icons.Check /> Nộp bài kiểm tra
+                        </Button>
+                    ) : (
+                        <Card variant="amber" style={{ textAlign: 'center' }}>
+                            <div style={{ fontSize: '48px', marginBottom: '15px' }}>
+                                {score === questions.length ? '🏆' : score >= questions.length * 0.6 ? '👍' : '💪'}
+                            </div>
+                            <div style={{ fontSize: '24px', fontWeight: '700', color: colors.slate[800] }}>
+                                Kết quả: {score}/{questions.length} câu đúng
+                            </div>
+                            <div style={{ fontSize: '18px', color: colors.orange[600], marginTop: '10px' }}>
+                                +{score * 20} điểm
+                            </div>
+                            <div style={{ marginTop: '20px' }}>
+                                <Button onClick={onNext} variant="success" size="large">
+                                    Xem kết quả tổng <Icons.Trophy />
+                                </Button>
+                            </div>
+                        </Card>
+                    )}
+
+                    {/* Navigation */}
+                    {!submitted && (
+                        <div style={{ marginTop: '20px' }}>
+                            <Button variant="secondary" onClick={onPrev}>← Quay lại ôn tập</Button>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==================== STEP 7: RESULTS ====================
+        function Step7_Results({ score, totalQuestions, onRestart }) {
+            const maxScore = 200; // Estimated max
+            const percentage = Math.min(Math.round((score / maxScore) * 100), 100);
+            
+            const getGrade = () => {
+                if (percentage >= 90) return { grade: 'S', color: colors.orange[500], text: 'XUẤT SẮC!', emoji: '🏆' };
+                if (percentage >= 80) return { grade: 'A', color: colors.green[500], text: 'Giỏi lắm!', emoji: '⭐' };
+                if (percentage >= 70) return { grade: 'B', color: colors.green[400], text: 'Tốt!', emoji: '👍' };
+                if (percentage >= 60) return { grade: 'C', color: colors.amber[500], text: 'Khá!', emoji: '💪' };
+                return { grade: 'D', color: colors.red[500], text: 'Cần ôn thêm', emoji: '📚' };
+            };
+
+            const result = getGrade();
+
+            return (
+                <div>
+                    <Card style={{
+                        background: 'linear-gradient(135deg, ' + colors.orange[500] + ', ' + colors.red[500] + ')',
+                        color: 'white',
+                        textAlign: 'center',
+                        padding: '40px 20px'
+                    }}>
+                        <div style={{ fontSize: '80px', marginBottom: '20px' }}>{result.emoji}</div>
+                        <h1 style={{ fontSize: '36px', marginBottom: '10px' }}>HOÀN THÀNH!</h1>
+                        <p style={{ fontSize: '20px', opacity: 0.9 }}>Bạn đã học xong mẫu ngữ pháp ～てしまう</p>
+                    </Card>
+
+                    <Card style={{ textAlign: 'center' }}>
+                        <div style={{
+                            width: '150px',
+                            height: '150px',
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, ' + result.color + ', ' + colors.slate[200] + ')',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: '0 auto 20px',
+                            fontSize: '64px',
+                            fontWeight: '900',
+                            color: 'white',
+                            boxShadow: '0 10px 40px ' + result.color + '40',
+                        }}>
+                            {result.grade}
+                        </div>
+                        
+                        <div style={{ fontSize: '28px', fontWeight: '700', color: colors.slate[800], marginBottom: '10px' }}>
+                            {result.text}
+                        </div>
+                        
+                        <div style={{ fontSize: '48px', fontWeight: '900', color: colors.orange[600], marginBottom: '20px' }}>
+                            {score} <span style={{ fontSize: '24px', color: colors.slate[500] }}>điểm</span>
+                        </div>
+
+                        {/* Stats */}
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(3, 1fr)', 
+                            gap: '15px',
+                            marginTop: '20px'
+                        }}>
+                            <div style={{ 
+                                background: colors.green[50], 
+                                padding: '15px', 
+                                borderRadius: '12px' 
+                            }}>
+                                <div style={{ fontSize: '24px' }}><Icons.Book /></div>
+                                <div style={{ fontWeight: '600', color: colors.green[700] }}>6 phần</div>
+                                <div style={{ fontSize: '14px', color: colors.slate[500] }}>đã học</div>
+                            </div>
+                            <div style={{ 
+                                background: colors.orange[50], 
+                                padding: '15px', 
+                                borderRadius: '12px' 
+                            }}>
+                                <div style={{ fontSize: '24px' }}><Icons.Mic /></div>
+                                <div style={{ fontWeight: '600', color: colors.orange[700] }}>9+ câu</div>
+                                <div style={{ fontSize: '14px', color: colors.slate[500] }}>đã đọc to</div>
+                            </div>
+                            <div style={{ 
+                                background: colors.red[50], 
+                                padding: '15px', 
+                                borderRadius: '12px' 
+                            }}>
+                                <div style={{ fontSize: '24px' }}><Icons.Target /></div>
+                                <div style={{ fontWeight: '600', color: colors.red[700] }}>5 câu</div>
+                                <div style={{ fontSize: '14px', color: colors.slate[500] }}>kiểm tra</div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    {/* Key Takeaways */}
+                    <Card variant="amber">
+                        <h3 style={{ color: colors.slate[800], marginBottom: '15px' }}>
+                            <Icons.Brain /> Ghi nhớ chính:
+                        </h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <span style={{ color: colors.green[600], fontSize: '20px' }}>✓</span>
+                                <span><strong>Công thức:</strong> Động từ thể て + しまう</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <span style={{ color: colors.green[600], fontSize: '20px' }}>✓</span>
+                                <span><strong>2 ý nghĩa:</strong> Hoàn thành 😊 & Tiếc nuối 😢</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <span style={{ color: colors.green[600], fontSize: '20px' }}>✓</span>
+                                <span><strong>Rút gọn:</strong> ～ちゃう / ～じゃう (thân mật)</span>
+                            </div>
+                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <span style={{ color: colors.green[600], fontSize: '20px' }}>✓</span>
+                                <span><strong>Mẹo nhớ:</strong> "しまう" = "shi-MẤT" → Làm xong MẤT luôn!</span>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
+                        <Button variant="secondary" onClick={onRestart} fullWidth>
+                            <Icons.Rocket /> Học lại từ đầu
+                        </Button>
+                        <Button variant="primary" fullWidth>
+                            <Icons.ArrowRight /> Bài tiếp theo
+                        </Button>
+                    </div>
+
+                    {/* Footer */}
+                    <div style={{ 
+                        textAlign: 'center', 
+                        marginTop: '30px', 
+                        color: colors.slate[500],
+                        fontSize: '14px'
+                    }}>
+                        <div>30 tháng 11 năm 2025</div>
+                        <div style={{ fontWeight: '600', color: colors.orange[600] }}>Lê Long Sơn | TIKME Learning</div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==================== RENDER ====================
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { mockClassStudents } from '@/utils/inclassData'
-import ToolLoader from '@/components/common/LoadingStates'
+import { ToolLoader } from '@/components/common/LoadingStates'
 import './ProgressTracker2Tool.css'
 
 // Generate mock student progress data
