@@ -10,6 +10,10 @@ node_modules/
 dist/
 build/
 *.log
+merge_workspace/builds/
+
+# Handoff staging (generated)
+handoff_staging/
 
 # IDE
 .vscode/
@@ -49,7 +53,26 @@ data/cache/
 # Temporary files
 *.tmp
 temp/
+temp_react_code.txt
+test_parse.py
 nul
 
 # Old git repositories (embedded)
 Tikme_App_Prototypies_git/
+
+# Claude Desktop App files (không commit)
+claude.exe
+*.exe
+*.dll
+*.pak
+*.dat
+*.bin
+*.json.tmp
+Squirrel*.log
+debug.log
+locales/
+resources/
+snapshot_blob.bin
+vk_swiftshader*
+vulkan-1.dll
+icudtl.dat

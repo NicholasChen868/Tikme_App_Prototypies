@@ -47,27 +47,57 @@ def parse_filename(filename: str) -> Optional[Dict[str, any]]:
     """
     Parse prototype filename to extract metadata
     
-    Format: PROTO_SM{block}_WF{wireframe}_{module}_{feature}_V{version}.html
-    Example: PROTO_SM6.1_WF4_B2_PreClassDashboard_V14.html
+    Supports two formats:
+    1. Old: PROTO_SM{block}_WF{wireframe}_{module}_{feature}_V{version}.html
+       Example: PROTO_SM6.1_WF4_B2_PreClassDashboard_V14.html
+    
+    2. New (with sub-tool): PROTO_SM{block}_WF{wireframe}_{module}_{tool}-{level}-{topic}_V{version}.html
+       Example: PROTO_SM6.1_WF4_B3_Grammar-N5-WA_V1.html
     
     Returns:
         Dict with keys: block, wireframe, module, feature, version
-        None if filename doesn't match pattern
+        For new format, feature = "{tool}-{level}-{topic}"
+        None if filename doesn't match either pattern
     """
-    # Pattern: PROTO_SM{block}_WF{wireframe}_{module}_{feature}_V{version}.html
-    pattern = r'PROTO_SM(\d+\.?\d*)_WF(\d+)_([A-Z]\d+)_([A-Za-z]+)_V(\d+)\.html'
+    # Try new pattern first (with sub-tool: Tool-Level-Topic)
+    # PROTO_SM6.1_WF4_B3_Grammar-N5-WA_V1.html
+    new_pattern = r'PROTO_SM(\d+\.?\d*)_WF(\d+)_([A-Z]\d+)_([A-Za-z]+)-([A-Z]\d+)-([A-Za-z0-9]+)_V(\d+)\.html'
     
-    match = re.match(pattern, filename)
-    if not match:
-        return None
+    match = re.match(new_pattern, filename)
+    if match:
+        # New format with sub-tool
+        tool = match.group(4)      # Grammar
+        level = match.group(5)     # N5
+        topic = match.group(6)     # WA
+        feature = f"{tool}-{level}-{topic}"  # Grammar-N5-WA
+        
+        return {
+            'block': f"SM{match.group(1)}",
+            'wireframe': int(match.group(2)),
+            'module': match.group(3),
+            'feature': feature,
+            'tool': tool,
+            'level': level,
+            'topic': topic,
+            'version': int(match.group(7))
+        }
     
-    return {
-        'block': f"SM{match.group(1)}",
-        'wireframe': int(match.group(2)),
-        'module': match.group(3),
-        'feature': match.group(4),
-        'version': int(match.group(5))
-    }
+    # Try old pattern (simple feature name)
+    # PROTO_SM6.1_WF4_B2_PreClassDashboard_V14.html
+    old_pattern = r'PROTO_SM(\d+\.?\d*)_WF(\d+)_([A-Z]\d+)_([A-Za-z]+)_V(\d+)\.html'
+    
+    match = re.match(old_pattern, filename)
+    if match:
+        return {
+            'block': f"SM{match.group(1)}",
+            'wireframe': int(match.group(2)),
+            'module': match.group(3),
+            'feature': match.group(4),
+            'version': int(match.group(5))
+        }
+    
+    # No match
+    return None
 
 
 def get_file_metadata(filepath: str) -> Dict[str, any]:
